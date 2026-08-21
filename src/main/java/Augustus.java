@@ -9,7 +9,7 @@ public class Augustus {
         System.out.println(border);
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while(true) {
             String input = sc.nextLine();
@@ -21,15 +21,35 @@ public class Augustus {
                 break;
             } else if (input.equals("list")) {
                 System.out.println(border);
+                System.out.println("These are the tasks in the list:");
                 for (int i = 0; i < tasks.size(); i++) {
                     System.out.println((i + 1) + ". " + tasks.get(i));
                 }
                 System.out.println(border);
             }
-            else {
-                tasks.add(input);
+            else if(input.startsWith("mark ")){
+                int num = Integer.parseInt(input.substring(5));
+                Task temp = tasks.get(num-1);
+                temp.markDone();
                 System.out.println(border);
-                System.out.println("added: " +input);
+                System.out.println("I have marked this task as done:");
+                System.out.println("   "+temp);
+                System.out.println(border);
+            }
+            else if(input.startsWith("unmark ")){
+                int num = Integer.parseInt(input.substring(7));
+                Task temp = tasks.get(num-1);
+                temp.markNotDone();
+                System.out.println(border);
+                System.out.println("I have marked this task as not done:");
+                System.out.println("   "+temp);
+                System.out.println(border);
+            }
+            else {
+                Task temp = new Task(input);
+                tasks.add(temp);
+                System.out.println(border);
+                System.out.println("added: " +temp);
                 System.out.println(border);
             }
         }
