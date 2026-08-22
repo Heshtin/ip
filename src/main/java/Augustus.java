@@ -45,11 +45,47 @@ public class Augustus {
                 System.out.println("   "+temp);
                 System.out.println(border);
             }
-            else {
-                Task temp = new Task(input);
-                tasks.add(temp);
+            else if(input.startsWith("todo ")){
+                String temp = input.substring(5);
+                ToDos task1 = new ToDos(temp);
+                tasks.add(task1);
                 System.out.println(border);
-                System.out.println("added: " +temp);
+                System.out.println("By order of Augustus, this task has been added:");
+                System.out.println("   " + task1);
+                System.out.println("The empire now holds " + tasks.size() + " tasks.");
+                System.out.println(border);
+
+            }
+            else if(input.startsWith("deadline ")){
+                int index = input.indexOf(" /by ");
+                String temp = input.substring(9,index);
+                String by = input.substring(index+5);
+                Deadline task1 = new Deadline(temp,by);
+                tasks.add(task1);
+                System.out.println(border);
+                System.out.println("By order of Augustus, this task has been added:");
+                System.out.println("   " + task1);
+                System.out.println("The empire now holds " + tasks.size() + " tasks.");
+                System.out.println(border);
+
+            }
+            else if(input.startsWith("event ")){
+                int index1 = input.indexOf(" /from ");
+                int index2 = input.indexOf(" /to ");
+                String temp = input.substring(6,index1);
+                String from = input.substring(index1+7,index2);
+                String to = input.substring(index2+5);
+                Event task1 = new Event(temp,from,to);
+                tasks.add(task1);
+                System.out.println(border);
+                System.out.println("By order of Augustus, this task has been added:");
+                System.out.println("   " + task1);
+                System.out.println("The empire now holds " + tasks.size() + " tasks.");
+                System.out.println(border);
+            }
+            else {
+                System.out.println(border);
+                System.out.println("You have said: " + input);
                 System.out.println(border);
             }
         }
