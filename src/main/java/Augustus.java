@@ -114,6 +114,15 @@ public class Augustus {
                     System.out.println("   " + task1);
                     System.out.println("The empire now holds " + tasks.size() + " tasks.");
                     System.out.println(border);
+                } else if(input.startsWith("delete ")){
+                    int num = Integer.parseInt(input.substring(7).trim());
+                    Task removedTask = tasks.remove(num - 1);
+                    System.out.println(border);
+                    System.out.println("Good, this task has been removed:");
+                    System.out.println("   " + removedTask);
+                    System.out.println("The empire now holds " + tasks.size() + " tasks.");
+                    System.out.println(border);
+
                 } else {
                     String commands = "Available commands:\n todo <description>\n deadline <description> /by (date/time)\n" +
                             " event <description> /from (start) /to (end)\n list \n mark\n unmark\n bye\n";
