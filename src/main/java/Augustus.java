@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Augustus {
     public static void main(String[] args) {
         String border = "__________________________";
@@ -9,6 +10,14 @@ public class Augustus {
         System.out.println(border);
 
         Scanner sc = new Scanner(System.in);
+
+        //access the file for task storage
+        TaskStorage storage = new TaskStorage("./src/data/augustus.txt");
+        try{
+            storage.createFile();
+        }catch (AugustusException e){
+            System.out.println(e.getMessage());
+        }
         ArrayList<Task> tasks = new ArrayList<>();
 
         while(true) {
