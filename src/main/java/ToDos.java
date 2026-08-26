@@ -9,4 +9,10 @@ public class ToDos extends Task {
     public String toString() {
         return "[T]" + super.toString();
     }
+
+
+    @Override
+    public String toFileString() {
+        return String.format("T | %s | %s",(isDone ? "1" : "0"), description);
+    }
 }
