@@ -14,6 +14,6 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
-        return String.format("Deadline | %s | %s | By %s",(isDone ? "1" : "0"), description, by);
+        return String.format("D | %s | %s | %s",(isDone ? "1" : "0"), description, by);
     }
 }

@@ -10,15 +10,16 @@ public class Augustus {
         System.out.println(border);
 
         Scanner sc = new Scanner(System.in);
-
+        ArrayList<Task> tasks;
         //access the file for task storage
         TaskStorage storage = new TaskStorage("./src/data/augustus.txt");
         try{
             storage.createFile();
+            tasks = storage.loadTasks();
         }catch (AugustusException e){
             System.out.println(e.getMessage());
+            tasks = new ArrayList<>();
         }
-        ArrayList<Task> tasks = new ArrayList<>();
 
         while(true) {
             String input = sc.nextLine();

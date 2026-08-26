@@ -1,2 +1,4 @@
-ToDos | 0 | read book
-Events | 0 | meet | From 2pm | To 4pm
+D | 1 | meeting | friday
+E | 0 | assignment | 4pm | 7pm 
+T | 0 | read history book
+T | 1 | buy groceries

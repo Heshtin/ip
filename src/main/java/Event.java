@@ -15,6 +15,6 @@ public class Event extends Task {
     }
     @Override
     public String toFileString() {
-        return String.format("Events | %s | %s | From %s | To %s",(isDone ? "1" : "0"), description, from,to);
+        return String.format("E | %s | %s | %s | %s",(isDone ? "1" : "0"), description, from,to);
     }
 }
