@@ -2,6 +2,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -74,7 +75,7 @@ public class TaskStorage {
                 if(taskType.equals("T")){
                     task = new ToDos(desc);
                 } else if(taskType.equals("D")){
-                    String by = seg[3];
+                    LocalDate by = LocalDate.parse(seg[3]);
                     task = new Deadline(desc,by);
                 } else if(taskType.equals("E")){
                     String from = seg[3];

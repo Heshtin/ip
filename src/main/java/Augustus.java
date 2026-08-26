@@ -1,3 +1,5 @@
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -93,13 +95,20 @@ public class Augustus {
                         throw new AugustusException("A deadline must contain /by followed the date or time");
                     }
                     String temp = input.substring(9, index);
-                    String by = input.substring(index + 5);
+                    String str_by = input.substring(index + 5);
                     if (temp.isEmpty()){
                         throw new AugustusException("The deadline must have a description");
                     }
-                    if (by.isEmpty()){
+                    if (str_by.isEmpty()){
                         throw new AugustusException("Write when this deadline is due");
                     }
+                    LocalDate by;
+                    try{
+                        by = LocalDate.parse(str_by);
+                    }catch (DateTimeException e){
+                        throw new AugustusException("The date is not in yyyy-MM-dd format");
+                    }
+
                     Deadline task1 = new Deadline(temp, by);
                     tasks.add(task1);
                     storage.saveTasks(tasks);

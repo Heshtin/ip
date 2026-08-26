@@ -1,4 +1,4 @@
-D | 1 | meeting | friday
-E | 0 | assignment | 4pm | 7pm 
-T | 0 | read history book
-T | 1 | buy groceries
+T | 1 | read book
+D | 1 | homework | 2025-08-13
+E | 0 | groceries | tdy | tmr
+D | 1 | exam | 2026-10-20
