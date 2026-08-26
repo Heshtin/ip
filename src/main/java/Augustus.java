@@ -47,6 +47,8 @@ public class Augustus {
                     }
                     Task temp = tasks.get(num - 1);
                     temp.markDone();
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("I have marked this task as done:");
                     System.out.println("   " + temp);
@@ -63,6 +65,8 @@ public class Augustus {
                     }
                     Task temp = tasks.get(num - 1);
                     temp.markNotDone();
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("I have marked this task as not done:");
                     System.out.println("   " + temp);
@@ -74,6 +78,8 @@ public class Augustus {
                     }
                     ToDos task1 = new ToDos(temp);
                     tasks.add(task1);
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("By order of Augustus, this task has been added:");
                     System.out.println("   " + task1);
@@ -95,6 +101,8 @@ public class Augustus {
                     }
                     Deadline task1 = new Deadline(temp, by);
                     tasks.add(task1);
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("By order of Augustus, this task has been added:");
                     System.out.println("   " + task1);
@@ -118,6 +126,8 @@ public class Augustus {
                     }
                     Event task1 = new Event(temp, from, to);
                     tasks.add(task1);
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("By order of Augustus, this task has been added:");
                     System.out.println("   " + task1);
@@ -126,6 +136,8 @@ public class Augustus {
                 } else if(input.startsWith("delete ")){
                     int num = Integer.parseInt(input.substring(7).trim());
                     Task removedTask = tasks.remove(num - 1);
+                    storage.saveTasks(tasks);
+
                     System.out.println(border);
                     System.out.println("Good, this task has been removed:");
                     System.out.println("   " + removedTask);
