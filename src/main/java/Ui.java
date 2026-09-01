@@ -18,6 +18,12 @@ public class Ui {
         return scanner.nextLine();
     }
 
+    public void showMessage(String message){
+        System.out.println(Border);
+        System.out.println(message);
+        System.out.println(Border);
+    }
+
     public void showError(String message){
         System.out.println(Border);
         System.out.println("ERROR: " + message);
@@ -33,5 +39,25 @@ public class Ui {
     }
     public void scannerClose(){
         scanner.close();
+    }
+    public void showCommands(){
+        String commands = "Augustus does not recognise that command.\n"
+                + "Available commands:\n"
+                + " todo <description>\n"
+                + " deadline <description> /by yyyy-MM-dd\n"
+                + " event <description> /from (start) /to (end)\n"
+                + " list\n"
+                + " mark <number>\n"
+                + " unmark <number>\n"
+                + " delete <number>\n"
+                + " bye";
+        this.showMessage(commands);
+    }
+    public void showAddTask(String task){
+        this.showMessage("By order of Augustus, this task has been added:\n" + "   " + task);
+    }
+
+    public void showList(int num){
+        this.showMessage("The empire now holds " + num + " tasks.");
     }
 }
