@@ -1,3 +1,7 @@
+package augustus.parser;
+
+import augustus.exception.AugustusException;
+
 public class Parser {
     public static String getCommand(String input){
         return input.split(" ")[0];
@@ -10,7 +14,7 @@ public class Parser {
         try {
             return Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            throw new AugustusException("Task number must be number");
+            throw new AugustusException("task number must be number");
         }
     }
 
