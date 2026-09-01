@@ -1,174 +1,131 @@
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Augustus {
-    public static void main(String[] args) {
-        String border = "__________________________";
-        System.out.println(border);
-        System.out.println("Hello! I'm Augustus");
-        System.out.println("What can I do for you?");
-        System.out.println(border);
+    private TaskStorage storage;
+    private TaskList tasks;
+    private Ui ui;
 
-        Scanner sc = new Scanner(System.in);
-        ArrayList<Task> tasks;
-        //access the file for task storage
-        TaskStorage storage = new TaskStorage("./src/data/augustus.txt");
+    public Augustus(String filepath){
+        this.ui = new Ui();
+        this.storage = new TaskStorage(filepath);
         try{
             storage.createFile();
-            tasks = storage.loadTasks();
-        }catch (AugustusException e){
-            System.out.println(e.getMessage());
-            tasks = new ArrayList<>();
+            tasks = new TaskList(storage.loadTasks());
+        } catch (AugustusException e) {
+            ui.showError(e.getMessage());
+            tasks = new TaskList();
         }
+    }
 
+    public void run() {
+        ui.showIntro();
         while(true) {
-            String input = sc.nextLine();
+            String input = ui.readLine();
             try {
-                if (input.equals("bye")) {
-                    System.out.println(border);
-                    System.out.println("Bye. Thank you for using this chatbot");
-                    System.out.println(border);
+                String command = Parser.getCommand(input);
+
+                if (command.equals("bye")) {
+                    ui.showExit();
                     break;
-                } else if (input.equals("list")) {
-                    System.out.println(border);
-                    System.out.println("These are the tasks in the list:");
+
+                } else if (command.equals("list")) {
+                    StringBuilder showList = new StringBuilder("These are the tasks in the list: \n");
                     for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println((i + 1) + ". " + tasks.get(i));
+                        showList.append((i + 1) + ". " + tasks.get(i)+"\n");
                     }
-                    System.out.println(border);
-                } else if (input.startsWith("mark ")) {
-                    int num;
-                    try {
-                        num = Integer.parseInt(input.substring(5));
-                    } catch (NumberFormatException e){
-                        throw new AugustusException("mark must be followed by a number");
-                    }
-                    if(num<1 || num >tasks.size()){
+                    ui.showMessage(showList.toString());
+
+                } else if (command.equals("mark")) {
+                    int num = Parser.parseTaskNum(input);
+                    if (num < 1 || num > tasks.size()) {
                         throw new AugustusException("Write a valid task number");
                     }
-                    Task temp = tasks.get(num - 1);
-                    temp.markDone();
-                    storage.saveTasks(tasks);
+                    Task task = tasks.get(num - 1);
+                    task.markDone();
+                    storage.saveTasks(tasks.getTasks());
 
-                    System.out.println(border);
-                    System.out.println("I have marked this task as done:");
-                    System.out.println("   " + temp);
-                    System.out.println(border);
-                } else if (input.startsWith("unmark ")) {
-                    int num;
-                    try {
-                        num = Integer.parseInt(input.substring(7));
-                    } catch (NumberFormatException e){
-                        throw new AugustusException("unmark must be followed by a number");
-                    }
-                    if(num<1 || num >tasks.size()){
+                    ui.showMessage("I have marked this task as done:\n" + "   " + task);
+
+                } else if (command.equals("unmark")) {
+                    int num = Parser.parseTaskNum(input);
+                    if (num < 1 || num > tasks.size()) {
                         throw new AugustusException("Write a valid task number");
                     }
-                    Task temp = tasks.get(num - 1);
-                    temp.markNotDone();
-                    storage.saveTasks(tasks);
+                    Task task = tasks.get(num - 1);
+                    task.markNotDone();
 
-                    System.out.println(border);
-                    System.out.println("I have marked this task as not done:");
-                    System.out.println("   " + temp);
-                    System.out.println(border);
-                } else if (input.startsWith("todo ")) {
-                    String temp = input.substring(5);
-                    if (temp.isEmpty()){
-                        throw new AugustusException("You cannot enter the empire without a decription");
-                    }
-                    ToDos task1 = new ToDos(temp);
-                    tasks.add(task1);
-                    storage.saveTasks(tasks);
+                    storage.saveTasks(tasks.getTasks());
+                    ui.showMessage("I have marked this task as undone:\n" + "   " + task);
 
-                    System.out.println(border);
-                    System.out.println("By order of Augustus, this task has been added:");
-                    System.out.println("   " + task1);
-                    System.out.println("The empire now holds " + tasks.size() + " tasks.");
-                    System.out.println(border);
+                } else if (command.equals("todo")) {
+                    String description = Parser.parseTodo(input);
+                    Task task = new ToDos(description);
+                    tasks.add(task);
+                    storage.saveTasks(tasks.getTasks());
 
-                } else if (input.startsWith("deadline ")) {
-                    int index = input.indexOf(" /by ");
-                    if (index == -1){
-                        throw new AugustusException("A deadline must contain /by followed the date or time");
-                    }
-                    String temp = input.substring(9, index);
-                    String str_by = input.substring(index + 5);
-                    if (temp.isEmpty()){
-                        throw new AugustusException("The deadline must have a description");
-                    }
-                    if (str_by.isEmpty()){
-                        throw new AugustusException("Write when this deadline is due");
-                    }
+                    ui.showAddTask(task.toString());
+                    ui.showList(tasks.size());
+
+                } else if (command.equals("deadline")) {
+                    String[] details = Parser.parseDeadline(input);
+
+                    String description = details[0];
+                    String dateString = details[1];
+
                     LocalDate by;
-                    try{
-                        by = LocalDate.parse(str_by);
-                    }catch (DateTimeException e){
+                    try {
+                        by = LocalDate.parse(dateString);
+                    } catch (DateTimeException e) {
                         throw new AugustusException("The date is not in yyyy-MM-dd format");
                     }
 
-                    Deadline task1 = new Deadline(temp, by);
-                    tasks.add(task1);
-                    storage.saveTasks(tasks);
+                    Task task = new Deadline(description, by);
+                    tasks.add(task);
+                    storage.saveTasks(tasks.getTasks());
 
-                    System.out.println(border);
-                    System.out.println("By order of Augustus, this task has been added:");
-                    System.out.println("   " + task1);
-                    System.out.println("The empire now holds " + tasks.size() + " tasks.");
-                    System.out.println(border);
+                    ui.showAddTask(task.toString());
+                    ui.showList(tasks.size());
 
-                } else if (input.startsWith("event ")) {
-                    int index1 = input.indexOf(" /from ");
-                    int index2 = input.indexOf(" /to ");
-                    if(index1 ==-1 || index2 ==-1 || index2 < index1){
-                        throw new AugustusException("The message should include /from and /to");
+                } else if (command.equals("event")) {
+                    String[] details = Parser.parseEvent(input);
+
+                    String description = details[0];
+                    String from = details[1];
+                    String to = details[2];
+
+                    Task task = new Event(description, from, to);
+                    tasks.add(task);
+
+                    storage.saveTasks(tasks.getTasks());
+
+                    ui.showAddTask(task.toString());
+                    ui.showList(tasks.size());
+
+                } else if (command.equals("delete")) {
+                    int num = Parser.parseTaskNum(input);
+
+                    if (num < 1 || num > tasks.size()) {
+                        throw new AugustusException("Write a valid task number");
                     }
-                    String temp = input.substring(6, index1);
-                    String from = input.substring(index1 + 7, index2);
-                    String to = input.substring(index2 + 5);
-                    if (temp.isEmpty()){
-                        throw new AugustusException("The event must have a description");
-                    }
-                    if (from.isEmpty() || to.isEmpty()){
-                        throw new AugustusException("Write when this event starts and ends");
-                    }
-                    Event task1 = new Event(temp, from, to);
-                    tasks.add(task1);
-                    storage.saveTasks(tasks);
 
-                    System.out.println(border);
-                    System.out.println("By order of Augustus, this task has been added:");
-                    System.out.println("   " + task1);
-                    System.out.println("The empire now holds " + tasks.size() + " tasks.");
-                    System.out.println(border);
-                } else if(input.startsWith("delete ")){
-                    int num = Integer.parseInt(input.substring(7).trim());
-                    Task removedTask = tasks.remove(num - 1);
-                    storage.saveTasks(tasks);
+                    Task removedTask = tasks.delete(num - 1);
+                    storage.saveTasks(tasks.getTasks());
 
-                    System.out.println(border);
-                    System.out.println("Good, this task has been removed:");
-                    System.out.println("   " + removedTask);
-                    System.out.println("The empire now holds " + tasks.size() + " tasks.");
-                    System.out.println(border);
-
+                    ui.showMessage("Good, this task has been removed:\n" + "   " + removedTask);
+                    ui.showList(tasks.size());
                 } else {
-                    String commands = "Available commands:\n todo <description>\n deadline <description> /by (date/time)\n" +
-                            " event <description> /from (start) /to (end)\n list \n mark\n unmark\n bye\n";
-                    throw new AugustusException("Augustus does not recognise that command.\n"+commands);
+                    ui.showCommands();
                 }
-            } catch (AugustusException e){
-                System.out.println(border);
-                System.out.println("ERROR: " + e.getMessage());
-                System.out.println(border);
+            } catch (AugustusException e) {
+                ui.showError(e.getMessage());
             }
         }
-        sc.close();
+        ui.scannerClose();
+    }
 
-        System.out.println("Hope to see you again soon!");
-        System.out.println(border);
-
+    public static void main(String[] args) {
+        new Augustus("./src/data/augustus.txt").run();
     }
 }
+
