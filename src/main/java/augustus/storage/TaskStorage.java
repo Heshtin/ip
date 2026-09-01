@@ -1,3 +1,10 @@
+package augustus.storage;
+
+import augustus.exception.AugustusException;
+import augustus.task.Deadline;
+import augustus.task.Event;
+import augustus.task.Task;
+import augustus.task.ToDos;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,7 +61,7 @@ public class TaskStorage {
 
     /**
      * Loads the tasks from the text file
-     * @return ArrayList<Task>
+     * @return ArrayList<augustus.task.Task>
      * @throws AugustusException
      */
     public ArrayList<Task> loadTasks() throws AugustusException{

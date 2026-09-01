@@ -1,3 +1,11 @@
+package augustus;
+
+import augustus.exception.AugustusException;
+import augustus.parser.Parser;
+import augustus.storage.TaskStorage;
+import augustus.task.*;
+import augustus.ui.Ui;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
