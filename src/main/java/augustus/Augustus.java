@@ -8,6 +8,7 @@ import augustus.ui.Ui;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Augustus {
     private TaskStorage storage;
@@ -43,6 +44,19 @@ public class Augustus {
                         showList.append((i + 1) + ". " + tasks.get(i)+"\n");
                     }
                     ui.showMessage(showList.toString());
+
+                } else if (command.equals("find")) {
+                    String keyword = Parser.parseFind(input);
+                    ArrayList<Task> matchingTasks = tasks.find(keyword);
+
+                    StringBuilder message =
+                            new StringBuilder("Here are the matching tasks in your list:\n");
+
+                    for (int i = 0; i < matchingTasks.size(); i++) {
+                        message.append((i + 1) + ". " + matchingTasks.get(i) + "\n");
+                    }
+
+                    ui.showMessage(message.toString());
 
                 } else if (command.equals("mark")) {
                     int num = Parser.parseTaskNum(input);

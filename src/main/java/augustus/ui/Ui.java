@@ -49,6 +49,7 @@ public class Ui {
                 + " deadline <description> /by yyyy-MM-dd\n"
                 + " event <description> /from (start) /to (end)\n"
                 + " list\n"
+                + " find <keyword>\n"
                 + " mark <number>\n"
                 + " unmark <number>\n"
                 + " delete <number>\n"

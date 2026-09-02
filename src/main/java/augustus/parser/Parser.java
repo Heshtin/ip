@@ -69,4 +69,14 @@ public class Parser {
 
         return new String[]{description, from, to};
     }
+
+    public static String parseFind(String input) throws AugustusException {
+        String keyword = input.substring(4).trim();
+
+        if (keyword.isEmpty()) {
+            throw new AugustusException("A keyword is required");
+        }
+
+        return keyword;
+    }
 }
