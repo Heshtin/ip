@@ -13,7 +13,7 @@ public class Parser {
      * @param input User input
      * @return the command word
      */
-    public static String getCommand(String input){
+    public static String getCommand(String input) {
         return input.split(" ")[0];
     }
 
@@ -32,7 +32,7 @@ public class Parser {
         try {
             return Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            throw new AugustusException("task number must be number");
+            throw new AugustusException("Task number must be number");
         }
     }
 
@@ -43,7 +43,7 @@ public class Parser {
      * @return the todo description
      * @throws AugustusException If the description is empty
      */
-    public static String parseTodo (String input) throws AugustusException{
+    public static String parseTodo(String input) throws AugustusException {
         String description = input.substring(4).trim();
         if (description.isEmpty()) {
             throw new AugustusException("You cannot enter the empire without a description");

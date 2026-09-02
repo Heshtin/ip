@@ -31,6 +31,6 @@ public class ToDos extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("T | %s | %s",(isDone ? "1" : "0"), description);
+        return String.format("T | %s | %s", (isDone ? "1" : "0"), description);
     }
 }

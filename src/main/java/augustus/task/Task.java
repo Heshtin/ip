@@ -3,7 +3,7 @@ package augustus.task;
 /**
  * Represents a task with a description and completion status.
  */
-abstract public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -20,14 +20,14 @@ abstract public class Task {
     /**
      * Marks this task as completed.
      */
-    public void markDone(){
+    public void markDone() {
         this.isDone = true;
     }
 
     /**
      * Marks this task as not completed.
      */
-    public void markNotDone(){
+    public void markNotDone() {
         this.isDone = false;
     }
 
