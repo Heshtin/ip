@@ -9,11 +9,20 @@ import augustus.ui.Ui;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
+/**
+ * Represents the main Augustus chatbot application.
+ * Coordinates user interaction, task management, parsing, and storage.
+ */
 public class Augustus {
     private TaskStorage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Creates an Augustus chatbot using the specified file for task storage.
+     *
+     * @param filepath Path of the file used to store tasks.
+     */
     public Augustus(String filepath){
         this.ui = new Ui();
         this.storage = new TaskStorage(filepath);
@@ -26,6 +35,9 @@ public class Augustus {
         }
     }
 
+    /**
+     * Starts the main command loop and processes user commands until the user exits.
+     */
     public void run() {
         ui.showIntro();
         while(true) {
@@ -132,6 +144,11 @@ public class Augustus {
         ui.scannerClose();
     }
 
+    /**
+     * Starts the Augustus chatbot application.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         new Augustus("./src/data/augustus.txt").run();
     }

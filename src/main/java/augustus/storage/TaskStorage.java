@@ -13,17 +13,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles the saving and loading of tasks from a data file
+ */
 public class TaskStorage {
     private String path;
 
+    /**
+     * Creates a TaskStorage that uses the specified file path
+     *
+     * @param path Path of the file used to store tasks.
+     */
     public TaskStorage(String path) {
         this.path = path;
     }
 
     /**
-     * Create a file if it does not exist
+     * Create the data file and its parent directories if they do not exist
      *
-     * @throws AugustusException
+     * @throws AugustusException if the data file cannot be created or accessed
      */
     public void createFile() throws AugustusException {
         try {
@@ -43,9 +51,10 @@ public class TaskStorage {
     }
 
     /**
-     * Saves the tasks for each operation such as adding, deleting, unmark, mark
-     * @param arr
-     * @throws AugustusException
+     * Saves all the tasks to the data file
+     *
+     * @param arr Tasks to be saved
+     * @throws AugustusException If the tasks cannot be saved to the file
      */
     public void saveTasks(ArrayList<Task> arr) throws AugustusException{
         try {
@@ -60,9 +69,10 @@ public class TaskStorage {
     }
 
     /**
-     * Loads the tasks from the text file
-     * @return ArrayList<augustus.task.Task>
-     * @throws AugustusException
+     * Loads the tasks from the data file
+     *
+     * @return A list containing the tasks loaded from the file
+     * @throws AugustusException If the tasks cannot be loaded or the stored data is invalid
      */
     public ArrayList<Task> loadTasks() throws AugustusException{
         ArrayList<Task> temp = new ArrayList<>();

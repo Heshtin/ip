@@ -2,10 +2,28 @@ package augustus.parser;
 
 import augustus.exception.AugustusException;
 
+/**
+ * Parses user input and extracts commands and command parameters
+ */
 public class Parser {
+
+    /**
+     * Returns the command word from the user's input
+     *
+     * @param input User input
+     * @return the command word
+     */
     public static String getCommand(String input){
         return input.split(" ")[0];
     }
+
+    /**
+     * Extracts the task number from a command
+     *
+     * @param input User input
+     * @return The task number from the commands mark or unmark or delete
+     * @throws AugustusException if the task number is missing or invalid
+     */
     public static int parseTaskNum(String input) throws AugustusException {
         String[] parts = input.split(" ");
         if (parts.length < 2) {
@@ -18,6 +36,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Extracts the description of todo task
+     *
+     * @param input User input containing todo command
+     * @return the todo description
+     * @throws AugustusException If the description is empty
+     */
     public static String parseTodo (String input) throws AugustusException{
         String description = input.substring(4).trim();
         if (description.isEmpty()) {
@@ -26,6 +51,13 @@ public class Parser {
         return description;
     }
 
+    /**
+     * Parses a deadline command into its description and due date
+     *
+     * @param input User input containing the deadline command
+     * @return an array containing description and the due date
+     * @throws AugustusException if the deadline format is invalid
+     */
     public static String[] parseDeadline(String input) throws AugustusException {
         int index = input.indexOf(" /by ");
         if (index == -1) {
@@ -44,6 +76,13 @@ public class Parser {
         return new String[]{description, date};
     }
 
+    /**
+     * Parses an event command into its description, start time and end time.
+     *
+     * @param input User input containing event command
+     * @return An array containing the description, start time and end time.
+     * @throws AugustusException if the event format is invalid
+     */
     public static String[] parseEvent(String input) throws AugustusException {
         int fromIndex = input.indexOf(" /from ");
         int toIndex = input.indexOf(" /to ");
