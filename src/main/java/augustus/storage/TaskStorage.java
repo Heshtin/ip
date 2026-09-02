@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TaskStorage {
-    private String path;
+    private String filePath;
 
-    public TaskStorage(String path) {
-        this.path = path;
+    public TaskStorage(String filePath) {
+        this.filePath = filePath;
     }
 
     /**
@@ -27,7 +27,7 @@ public class TaskStorage {
      */
     public void createFile() throws AugustusException {
         try {
-            File file = new File(path);
+            File file = new File(filePath);
             File parent = file.getParentFile();
 
             if (parent != null && !parent.exists()) {
@@ -37,24 +37,24 @@ public class TaskStorage {
             if (!file.exists()) {
                 file.createNewFile();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new AugustusException("Unable to access/create the data file");
         }
     }
 
     /**
      * Saves the tasks for each operation such as adding, deleting, unmark, mark
-     * @param arr
+     * @param tasks
      * @throws AugustusException
      */
-    public void saveTasks(ArrayList<Task> arr) throws AugustusException{
+    public void saveTasks(ArrayList<Task> tasks) throws AugustusException {
         try {
-            FileWriter write = new FileWriter(path);
-            for (Task temp:arr){
-                write.write(temp.toFileString()+"\n");
+            FileWriter writer = new FileWriter(filePath);
+            for (Task task : tasks) {
+                writer.write(task.toFileString() + "\n");
             }
-            write.close();
-        }catch (IOException e){
+            writer.close();
+        } catch (IOException e) {
             throw new AugustusException("Unable to save tasks");
         }
     }
@@ -64,45 +64,45 @@ public class TaskStorage {
      * @return ArrayList<augustus.task.Task>
      * @throws AugustusException
      */
-    public ArrayList<Task> loadTasks() throws AugustusException{
-        ArrayList<Task> temp = new ArrayList<>();
+    public ArrayList<Task> loadTasks() throws AugustusException {
+        ArrayList<Task> tasks = new ArrayList<>();
         try {
-            File file = new File(path);
-            Scanner sc = new Scanner(file);
-            while(sc.hasNextLine()){
-                String line = sc.nextLine();
-                if(line.isBlank()){
+            File file = new File(filePath);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.isBlank()) {
                     continue;
                 }
-                String[] seg = line.split(" \\| ");
-                String taskType = seg[0];
-                boolean mark  = seg[1].equals("1");
-                String desc = seg[2];
+                String[] segments = line.split(" \\| ");
+                String taskType = segments[0];
+                boolean isMarked = segments[1].equals("1");
+                String description = segments[2];
                 Task task;
-                if(taskType.equals("T")){
-                    task = new ToDos(desc);
-                } else if(taskType.equals("D")){
-                    LocalDate by = LocalDate.parse(seg[3]);
-                    task = new Deadline(desc,by);
-                } else if(taskType.equals("E")){
-                    String from = seg[3];
-                    String to = seg[4];
-                    task = new Event(desc,from,to);
+                if (taskType.equals("T")) {
+                    task = new ToDos(description);
+                } else if (taskType.equals("D")) {
+                    LocalDate by = LocalDate.parse(segments[3]);
+                    task = new Deadline(description, by);
+                } else if (taskType.equals("E")) {
+                    String from = segments[3];
+                    String to = segments[4];
+                    task = new Event(description, from, to);
                 } else {
                     throw new AugustusException("Invalid task type in data file");
                 }
-                if(mark){
+                if (isMarked) {
                     task.markDone();
                 }
-                temp.add(task);
+                tasks.add(task);
             }
 
-            sc.close();
+            scanner.close();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new AugustusException("Unable to load tasks");
         }
-        return temp;
+        return tasks;
     }
 
 }

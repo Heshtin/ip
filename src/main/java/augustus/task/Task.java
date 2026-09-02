@@ -1,6 +1,6 @@
 package augustus.task;
 
-abstract public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -9,17 +9,20 @@ abstract public class Task {
         this.isDone = false;
     }
 
-    public void markDone(){
+    public void markDone() {
         this.isDone = true;
     }
-    public void markNotDone(){
+
+    public void markNotDone() {
         this.isDone = false;
     }
+
     @Override
     public String toString() {
         String icon = isDone ? "X" : " ";
         return "[" + icon + "] " + description;
     }
+
     public abstract String toFileString();
 
 }

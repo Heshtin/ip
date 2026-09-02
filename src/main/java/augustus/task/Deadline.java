@@ -5,21 +5,21 @@ import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
 
-    protected LocalDate by;
+    protected LocalDate dueDate;
 
     public Deadline(String description, LocalDate by) {
         super(description);
-        this.by = by;
+        this.dueDate = by;
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("MMM d yyyy");
-        return String.format("[D]%s (by: %s)",super.toString(),by.format(f));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+        return String.format("[D]%s (by: %s)", super.toString(), dueDate.format(formatter));
     }
 
     @Override
     public String toFileString() {
-        return String.format("D | %s | %s | %s",(isDone ? "1" : "0"), description, by);
+        return String.format("D | %s | %s | %s", (isDone ? "1" : "0"), description, dueDate);
     }
 }

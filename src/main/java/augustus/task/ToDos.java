@@ -2,7 +2,6 @@ package augustus.task;
 
 public class ToDos extends Task {
 
-
     public ToDos(String description) {
         super(description);
     }
@@ -12,9 +11,8 @@ public class ToDos extends Task {
         return "[T]" + super.toString();
     }
 
-
     @Override
     public String toFileString() {
-        return String.format("T | %s | %s",(isDone ? "1" : "0"), description);
+        return String.format("T | %s | %s", (isDone ? "1" : "0"), description);
     }
 }

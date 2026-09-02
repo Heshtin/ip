@@ -3,7 +3,11 @@ package augustus;
 import augustus.exception.AugustusException;
 import augustus.parser.Parser;
 import augustus.storage.TaskStorage;
-import augustus.task.*;
+import augustus.task.Deadline;
+import augustus.task.Event;
+import augustus.task.Task;
+import augustus.task.TaskList;
+import augustus.task.ToDos;
 import augustus.ui.Ui;
 
 import java.time.DateTimeException;
@@ -14,10 +18,10 @@ public class Augustus {
     private TaskList tasks;
     private Ui ui;
 
-    public Augustus(String filepath){
+    public Augustus(String filePath) {
         this.ui = new Ui();
-        this.storage = new TaskStorage(filepath);
-        try{
+        this.storage = new TaskStorage(filePath);
+        try {
             storage.createFile();
             tasks = new TaskList(storage.loadTasks());
         } catch (AugustusException e) {
@@ -28,7 +32,7 @@ public class Augustus {
 
     public void run() {
         ui.showIntro();
-        while(true) {
+        while (true) {
             String input = ui.readLine();
             try {
                 String command = Parser.getCommand(input);
@@ -36,17 +40,16 @@ public class Augustus {
                 if (command.equals("bye")) {
                     ui.showExit();
                     break;
-
                 } else if (command.equals("list")) {
-                    StringBuilder showList = new StringBuilder("These are the tasks in the list: \n");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        showList.append((i + 1) + ". " + tasks.get(i)+"\n");
+                    StringBuilder listMessage = new StringBuilder("These are the tasks in the list: \n");
+                    for (int i = 0; i < tasks.getSize(); i++) {
+                        listMessage.append((i + 1) + ". " + tasks.get(i) + "\n");
                     }
-                    ui.showMessage(showList.toString());
+                    ui.showMessage(listMessage.toString());
 
                 } else if (command.equals("mark")) {
                     int num = Parser.parseTaskNum(input);
-                    if (num < 1 || num > tasks.size()) {
+                    if (num < 1 || num > tasks.getSize()) {
                         throw new AugustusException("Write a valid task number");
                     }
                     Task task = tasks.get(num - 1);
@@ -57,7 +60,7 @@ public class Augustus {
 
                 } else if (command.equals("unmark")) {
                     int num = Parser.parseTaskNum(input);
-                    if (num < 1 || num > tasks.size()) {
+                    if (num < 1 || num > tasks.getSize()) {
                         throw new AugustusException("Write a valid task number");
                     }
                     Task task = tasks.get(num - 1);
@@ -73,7 +76,7 @@ public class Augustus {
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showAddTask(task.toString());
-                    ui.showList(tasks.size());
+                    ui.showTaskCount(tasks.getSize());
 
                 } else if (command.equals("deadline")) {
                     String[] details = Parser.parseDeadline(input);
@@ -93,7 +96,7 @@ public class Augustus {
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showAddTask(task.toString());
-                    ui.showList(tasks.size());
+                    ui.showTaskCount(tasks.getSize());
 
                 } else if (command.equals("event")) {
                     String[] details = Parser.parseEvent(input);
@@ -108,12 +111,12 @@ public class Augustus {
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showAddTask(task.toString());
-                    ui.showList(tasks.size());
+                    ui.showTaskCount(tasks.getSize());
 
                 } else if (command.equals("delete")) {
                     int num = Parser.parseTaskNum(input);
 
-                    if (num < 1 || num > tasks.size()) {
+                    if (num < 1 || num > tasks.getSize()) {
                         throw new AugustusException("Write a valid task number");
                     }
 
@@ -121,7 +124,7 @@ public class Augustus {
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showMessage("Good, this task has been removed:\n" + "   " + removedTask);
-                    ui.showList(tasks.size());
+                    ui.showTaskCount(tasks.getSize());
                 } else {
                     ui.showCommands();
                 }
@@ -129,7 +132,7 @@ public class Augustus {
                 ui.showError(e.getMessage());
             }
         }
-        ui.scannerClose();
+        ui.closeScanner();
     }
 
     public static void main(String[] args) {

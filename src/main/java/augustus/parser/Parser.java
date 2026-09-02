@@ -3,9 +3,10 @@ package augustus.parser;
 import augustus.exception.AugustusException;
 
 public class Parser {
-    public static String getCommand(String input){
+    public static String getCommand(String input) {
         return input.split(" ")[0];
     }
+
     public static int parseTaskNum(String input) throws AugustusException {
         String[] parts = input.split(" ");
         if (parts.length < 2) {
@@ -14,11 +15,11 @@ public class Parser {
         try {
             return Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            throw new AugustusException("task number must be number");
+            throw new AugustusException("Task number must be number");
         }
     }
 
-    public static String parseTodo (String input) throws AugustusException{
+    public static String parseTodo(String input) throws AugustusException {
         String description = input.substring(4).trim();
         if (description.isEmpty()) {
             throw new AugustusException("You cannot enter the empire without a description");

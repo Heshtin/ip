@@ -8,21 +8,27 @@ public class TaskList {
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
+
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
+
     public void add(Task task) {
         tasks.add(task);
     }
+
     public Task delete(int index) {
         return tasks.remove(index);
     }
+
     public Task get(int index) {
         return tasks.get(index);
     }
-    public int size() {
+
+    public int getSize() {
         return tasks.size();
     }
+
     public ArrayList<Task> getTasks() {
         return tasks;
     }
