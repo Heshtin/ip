@@ -109,6 +109,13 @@ public class Parser {
         return new String[]{description, from, to};
     }
 
+    /**
+     * Parses a find command and create the corresponding command.
+     * @param input User input to parse.
+     * @return The parsed command.
+     * @throws AugustusException if the input string is empty.
+     */
+
     public static String parseFind(String input) throws AugustusException {
         String keyword = input.substring(4).trim();
 
