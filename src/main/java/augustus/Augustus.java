@@ -1,5 +1,9 @@
 package augustus;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import augustus.exception.AugustusException;
 import augustus.parser.Parser;
 import augustus.storage.TaskStorage;
@@ -9,10 +13,6 @@ import augustus.task.Task;
 import augustus.task.TaskList;
 import augustus.task.ToDos;
 import augustus.ui.Ui;
-
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * Represents the main Augustus chatbot application.
