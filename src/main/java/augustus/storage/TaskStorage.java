@@ -11,7 +11,7 @@ import augustus.exception.AugustusException;
 import augustus.task.Deadline;
 import augustus.task.Event;
 import augustus.task.Task;
-import augustus.task.ToDos;
+import augustus.task.ToDo;
 
 /**
  * Handles the saving and loading of tasks from a data file
@@ -90,7 +90,7 @@ public class TaskStorage {
                 String description = segments[2];
                 Task task;
                 if (taskType.equals("T")) {
-                    task = new ToDos(description);
+                    task = new ToDo(description);
                 } else if (taskType.equals("D")) {
                     LocalDate by = LocalDate.parse(segments[3]);
                     task = new Deadline(description, by);

@@ -4,8 +4,8 @@ package augustus.task;
  * Represents a task with a description and completion status.
  */
 public abstract class Task {
-    protected String description;
-    protected boolean isDone;
+    private String description;
+    private boolean isDone;
 
     /**
      * Creates a task with the given description.
@@ -29,6 +29,24 @@ public abstract class Task {
      */
     public void markNotDone() {
         this.isDone = false;
+    }
+
+    /**
+     * Returns the description of this task.
+     *
+     * @return description of this task
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Returns whether this task has been completed.
+     *
+     * @return true if the task is completed, false otherwise
+     */
+    public boolean isDone() {
+        return isDone;
     }
 
     /**

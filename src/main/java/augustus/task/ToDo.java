@@ -3,14 +3,14 @@ package augustus.task;
 /**
  * Represents a todo task without a specific date or time.
  */
-public class ToDos extends Task {
+public class ToDo extends Task {
 
     /**
      * Creates a todo task with the given description.
      *
      * @param description Description of the todo task.
      */
-    public ToDos(String description) {
+    public ToDo(String description) {
         super(description);
     }
 
@@ -31,6 +31,6 @@ public class ToDos extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("T | %s | %s", (isDone ? "1" : "0"), description);
+        return String.format("T | %s | %s", (isDone() ? "1" : "0"), getDescription());
     }
 }

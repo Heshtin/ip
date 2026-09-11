@@ -88,7 +88,7 @@ public class ParserTest {
     @Test
     public void parseTaskNum_validTaskNumber_returnsTaskNumber()
             throws AugustusException {
-        int result = Parser.parseTaskNum("mark 2");
+        int result = Parser.parseTaskNumber("mark 2");
 
         assertEquals(2, result);
     }
@@ -96,13 +96,13 @@ public class ParserTest {
     @Test
     public void parseTaskNum_missingTaskNumber_exceptionThrown() {
         assertThrows(AugustusException.class, () ->
-                Parser.parseTaskNum("mark"));
+                Parser.parseTaskNumber("mark"));
     }
 
     @Test
     public void parseTaskNum_invalidTaskNumber_exceptionThrown() {
         assertThrows(AugustusException.class, () ->
-                Parser.parseTaskNum("mark abc"));
+                Parser.parseTaskNumber("mark abc"));
     }
 
 }
