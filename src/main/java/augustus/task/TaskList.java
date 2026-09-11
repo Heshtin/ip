@@ -58,7 +58,7 @@ public class TaskList {
      *
      * @return Number of tasks.
      */
-    public int getSize() {
+    public int getTaskCount() {
         return tasks.size();
     }
 
@@ -80,7 +80,7 @@ public class TaskList {
         ArrayList<Task> matchingTasks = new ArrayList<>();
 
         for (Task task : tasks) {
-            if (task.description.contains(keyword)) {
+            if (task.getDescription().contains(keyword)) {
                 matchingTasks.add(task);
             }
         }

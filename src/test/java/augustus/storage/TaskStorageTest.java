@@ -15,7 +15,7 @@ import augustus.exception.AugustusException;
 import augustus.task.Deadline;
 import augustus.task.Event;
 import augustus.task.Task;
-import augustus.task.ToDos;
+import augustus.task.ToDo;
 
 public class TaskStorageTest {
 
@@ -65,7 +65,7 @@ public class TaskStorageTest {
         storage.createFile();
 
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new ToDos("read book"));
+        tasks.add(new ToDo("read book"));
         tasks.add(new Deadline("submit assignment", LocalDate.of(2026, 9, 10)));
         tasks.add(new Event("project meeting", "2pm", "4pm"));
 

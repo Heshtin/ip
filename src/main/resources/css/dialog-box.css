@@ -1,0 +1,33 @@
+.label {
+    -fx-background-color: rgba(255, 255, 255, 0.90);
+    -fx-text-fill: #2f2116;
+
+    -fx-padding: 8px 12px 8px 12px;
+
+    -fx-background-radius: 12px 12px 2px 12px;
+    -fx-border-radius: 12px 12px 2px 12px;
+
+    -fx-border-color: rgba(120, 80, 30, 0.4);
+    -fx-border-width: 1px;
+
+    -fx-border-insets: 0px 7px 0px 7px;
+    -fx-background-insets: 0px 7px 0px 7px;
+}
+
+.reply-label {
+    -fx-background-color: rgba(245, 222, 179, 0.92);
+
+    -fx-background-radius: 12px 12px 12px 2px;
+    -fx-border-radius: 12px 12px 12px 2px;
+}
+
+#displayPicture {
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.25),
+        8,
+        0.3,
+        2,
+        2
+    );
+}

@@ -12,13 +12,13 @@ public class Event extends Task {
      * Creates an event with the given description, start time, and end time.
      *
      * @param description Description of the event.
-     * @param from Start time of the event.
-     * @param to End time of the event.
+     * @param startTime Start time of the event.
+     * @param endTime End time of the event.
      */
-    public Event(String description, String from, String to) {
+    public Event(String description, String startTime, String endTime) {
         super(description);
-        this.startTime = from;
-        this.endTime = to;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     /**
@@ -38,6 +38,6 @@ public class Event extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("E | %s | %s | %s | %s", (isDone ? "1" : "0"), description, startTime, endTime);
+        return String.format("E | %s | %s | %s | %s", (isDone() ? "1" : "0"), getDescription(), startTime, endTime);
     }
 }

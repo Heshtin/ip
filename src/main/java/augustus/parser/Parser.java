@@ -24,13 +24,13 @@ public class Parser {
      * @return The task number from the commands mark or unmark or delete
      * @throws AugustusException if the task number is missing or invalid
      */
-    public static int parseTaskNum(String input) throws AugustusException {
-        String[] parts = input.split(" ");
-        if (parts.length < 2) {
+    public static int parseTaskNumber(String input) throws AugustusException {
+        String[] inputParts = input.split(" ");
+        if (inputParts.length < 2) {
             throw new AugustusException("A task number is required");
         }
         try {
-            return Integer.parseInt(parts[1]);
+            return Integer.parseInt(inputParts[1]);
         } catch (NumberFormatException e) {
             throw new AugustusException("Task number must be number");
         }
