@@ -46,118 +46,18 @@ public class Augustus {
      */
     public void run() {
         ui.showMessage(ui.getIntroMessage());
+
         while (true) {
             String input = ui.readLine();
-            try {
-                String command = Parser.getCommand(input);
+            String response = getResponse(input);
 
-                if (command.equals("bye")) {
-                    ui.showMessage(ui.getExitMessage());
-                    break;
-                } else if (command.equals("list")) {
-                    StringBuilder listMessage = new StringBuilder("These are the tasks in the list: \n");
-                    for (int i = 0; i < tasks.getTaskCount(); i++) {
-                        listMessage.append((i + 1) + ". " + tasks.get(i) + "\n");
-                    }
-                    ui.showMessage(listMessage.toString());
+            ui.showMessage(response);
 
-                } else if (command.equals("find")) {
-                    String keyword = Parser.parseFind(input);
-                    ArrayList<Task> matchingTasks = tasks.find(keyword);
-
-                    StringBuilder message =
-                            new StringBuilder("Here are the matching tasks in your list:\n");
-
-                    for (int i = 0; i < matchingTasks.size(); i++) {
-                        message.append((i + 1) + ". " + matchingTasks.get(i) + "\n");
-                    }
-
-                    ui.showMessage(message.toString());
-
-                } else if (command.equals("mark")) {
-                    int num = Parser.parseTaskNumber(input);
-                    if (num < 1 || num > tasks.getTaskCount()) {
-                        throw new AugustusException("Write a valid task number");
-                    }
-                    Task task = tasks.get(num - 1);
-                    task.markDone();
-                    storage.saveTasks(tasks.getTasks());
-
-                    ui.showMessage(ui.getMarkTaskMessage(task.toString()));
-
-                } else if (command.equals("unmark")) {
-                    int num = Parser.parseTaskNumber(input);
-                    if (num < 1 || num > tasks.getTaskCount()) {
-                        throw new AugustusException("Write a valid task number");
-                    }
-                    Task task = tasks.get(num - 1);
-                    task.markNotDone();
-
-                    storage.saveTasks(tasks.getTasks());
-                    ui.showMessage(ui.getUnmarkTaskMessage(task.toString()));
-                } else if (command.equals("todo")) {
-                    String description = Parser.parseTodo(input);
-                    Task task = new ToDo(description);
-                    tasks.add(task);
-                    storage.saveTasks(tasks.getTasks());
-
-                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
-                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
-
-                } else if (command.equals("deadline")) {
-                    String[] details = Parser.parseDeadline(input);
-
-                    String description = details[0];
-                    String dateString = details[1];
-
-                    LocalDate by;
-                    try {
-                        by = LocalDate.parse(dateString);
-                    } catch (DateTimeException e) {
-                        throw new AugustusException("The date is not in yyyy-MM-dd format");
-                    }
-
-                    Task task = new Deadline(description, by);
-                    tasks.add(task);
-                    storage.saveTasks(tasks.getTasks());
-
-                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
-                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
-
-                } else if (command.equals("event")) {
-                    String[] details = Parser.parseEvent(input);
-
-                    String description = details[0];
-                    String from = details[1];
-                    String to = details[2];
-
-                    Task task = new Event(description, from, to);
-                    tasks.add(task);
-
-                    storage.saveTasks(tasks.getTasks());
-
-                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
-                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
-
-                } else if (command.equals("delete")) {
-                    int num = Parser.parseTaskNumber(input);
-
-                    if (num < 1 || num > tasks.getTaskCount()) {
-                        throw new AugustusException("Write a valid task number");
-                    }
-
-                    Task removedTask = tasks.delete(num - 1);
-                    storage.saveTasks(tasks.getTasks());
-
-                    ui.showMessage(ui.getDeleteTaskMessage(removedTask.toString()));
-                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
-                } else {
-                    ui.showMessage(ui.getCommandsMessage());
-                }
-            } catch (AugustusException e) {
-                ui.showMessage(ui.getErrorMessage(e.getMessage()));
+            if (Parser.getCommand(input).equals("bye")) {
+                break;
             }
         }
+
         ui.closeScanner();
     }
 
@@ -171,123 +71,24 @@ public class Augustus {
         try {
             String command = Parser.getCommand(input);
 
-            if (command.equals("bye")) {
-                return ui.getExitMessage();
-            } else if (command.equals("list")) {
-                StringBuilder message =
-                        new StringBuilder("These are the tasks in the list:\n");
-
-                for (int i = 0; i < tasks.getTaskCount(); i++) {
-                    message.append(i + 1)
-                            .append(". ")
-                            .append(tasks.get(i))
-                            .append("\n");
-                }
-
-                return message.toString();
-
+            if (command.equals("list")) {
+                return handleList();
             } else if (command.equals("find")) {
-                String keyword = Parser.parseFind(input);
-                ArrayList<Task> matchingTasks = tasks.find(keyword);
-
-                StringBuilder message =
-                        new StringBuilder("Here are the matching tasks in your list:\n");
-
-                for (int i = 0; i < matchingTasks.size(); i++) {
-                    message.append(i + 1)
-                            .append(". ")
-                            .append(matchingTasks.get(i))
-                            .append("\n");
-                }
-
-                return message.toString();
-
+                return handleFind(input);
             } else if (command.equals("mark")) {
-                int num = Parser.parseTaskNumber(input);
-
-                if (num < 1 || num > tasks.getTaskCount()) {
-                    throw new AugustusException("Write a valid task number");
-                }
-
-                Task task = tasks.get(num - 1);
-                task.markDone();
-                storage.saveTasks(tasks.getTasks());
-
-                return ui.getMarkTaskMessage(task.toString());
-
+                return handleMark(input, true);
             } else if (command.equals("unmark")) {
-                int num = Parser.parseTaskNumber(input);
-
-                if (num < 1 || num > tasks.getTaskCount()) {
-                    throw new AugustusException("Write a valid task number");
-                }
-
-                Task task = tasks.get(num - 1);
-                task.markNotDone();
-                storage.saveTasks(tasks.getTasks());
-
-                return ui.getUnmarkTaskMessage(task.toString());
-
+                return handleMark(input, false);
             } else if (command.equals("todo")) {
-                String description = Parser.parseTodo(input);
-                Task task = new ToDo(description);
-
-                tasks.add(task);
-                storage.saveTasks(tasks.getTasks());
-                return ui.getAddTaskMessage(task.toString())
-                        + "\n"
-                        + ui.getTaskCountMessage(tasks.getTaskCount());
-
+                return handleTodo(input);
             } else if (command.equals("deadline")) {
-                String[] details = Parser.parseDeadline(input);
-
-                String description = details[0];
-                String dateString = details[1];
-
-                LocalDate by;
-                try {
-                    by = LocalDate.parse(dateString);
-                } catch (DateTimeException e) {
-                    throw new AugustusException(
-                            "The date is not in yyyy-MM-dd format");
-                }
-
-                Task task = new Deadline(description, by);
-                tasks.add(task);
-                storage.saveTasks(tasks.getTasks());
-
-                return ui.getAddTaskMessage(task.toString())
-                        + "\n"
-                        + ui.getTaskCountMessage(tasks.getTaskCount());
-
+                return handleDeadline(input);
             } else if (command.equals("event")) {
-                String[] details = Parser.parseEvent(input);
-
-                String description = details[0];
-                String from = details[1];
-                String to = details[2];
-
-                Task task = new Event(description, from, to);
-                tasks.add(task);
-                storage.saveTasks(tasks.getTasks());
-
-                return ui.getAddTaskMessage(task.toString())
-                        + "\n"
-                        + ui.getTaskCountMessage(tasks.getTaskCount());
-
+                return handleEvent(input);
             } else if (command.equals("delete")) {
-                int num = Parser.parseTaskNumber(input);
-
-                if (num < 1 || num > tasks.getTaskCount()) {
-                    throw new AugustusException("Write a valid task number");
-                }
-
-                Task removedTask = tasks.delete(num - 1);
-                storage.saveTasks(tasks.getTasks());
-
-                return ui.getDeleteTaskMessage(removedTask.toString())
-                        + "\n"
-                        + ui.getTaskCountMessage(tasks.getTaskCount());
+                return handleDelete(input);
+            } else if (command.equals("bye")) {
+                return ui.getExitMessage();
             }
 
             return ui.getCommandsMessage();
@@ -295,6 +96,182 @@ public class Augustus {
         } catch (AugustusException e) {
             return ui.getErrorMessage(e.getMessage());
         }
+    }
+
+    /**
+     * Handles the todo command by creating and storing a new todo task.
+     *
+     * @param input User input containing the todo command.
+     * @return Response message after adding the task.
+     * @throws AugustusException If the todo description is invalid or
+     *                           the task cannot be saved.
+     */
+    private String handleTodo(String input) throws AugustusException {
+        String description = Parser.parseTodo(input);
+        Task task = new ToDo(description);
+
+        tasks.add(task);
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getAddTaskMessage(task.toString())
+                + "\n"
+                + ui.getTaskCountMessage(tasks.getTaskCount());
+    }
+
+    /**
+     * Handles the deadline command by creating and storing a new deadline task.
+     *
+     * @param input User input containing the deadline command.
+     * @return Response message after adding the task.
+     * @throws AugustusException If the deadline input or date is invalid,
+     *                           or the task cannot be saved.
+     */
+    private String handleDeadline(String input) throws AugustusException {
+        String[] details = Parser.parseDeadline(input);
+
+        String description = details[0];
+        String dateString = details[1];
+
+        LocalDate by;
+        try {
+            by = LocalDate.parse(dateString);
+        } catch (DateTimeException e) {
+            throw new AugustusException("The date is not in yyyy-MM-dd format");
+        }
+
+        Task task = new Deadline(description, by);
+
+        tasks.add(task);
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getAddTaskMessage(task.toString())
+                + "\n"
+                + ui.getTaskCountMessage(tasks.getTaskCount());
+    }
+
+    /**
+     * Handles the event command by creating and storing a new event task.
+     *
+     * @param input User input containing the event command.
+     * @return Response message after adding the task.
+     * @throws AugustusException If the event input is invalid or
+     *                           the task cannot be saved.
+     */
+    private String handleEvent(String input) throws AugustusException {
+        String[] details = Parser.parseEvent(input);
+
+        String description = details[0];
+        String from = details[1];
+        String to = details[2];
+
+        Task task = new Event(description, from, to);
+
+        tasks.add(task);
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getAddTaskMessage(task.toString())
+                + "\n"
+                + ui.getTaskCountMessage(tasks.getTaskCount());
+    }
+
+    /**
+     * Handles marking or unmarking a task and saves the updated task list.
+     *
+     * @param input User input containing the task number.
+     * @param isMark {@code true} to mark the task as done,
+     *               {@code false} to mark it as not done.
+     * @return Response message after updating the task.
+     * @throws AugustusException If the task number is invalid or
+     *                           the task list cannot be saved.
+     */
+    private String handleMark(String input, boolean isMark) throws AugustusException {
+        int num = Parser.parseTaskNumber(input);
+
+        if (num < 1 || num > tasks.getTaskCount()) {
+            throw new AugustusException("Write a valid task number");
+        }
+
+        Task task = tasks.get(num - 1);
+        if (isMark) {
+            task.markDone();
+        } else {
+            task.markNotDone();
+        }
+
+        storage.saveTasks(tasks.getTasks());
+
+        if (isMark) {
+            return ui.getMarkTaskMessage(task.toString());
+        } else {
+            return ui.getUnmarkTaskMessage(task.toString());
+        }
+    }
+
+    /**
+     * Creates a message containing all tasks in the task list.
+     *
+     * @return Message containing the numbered task list.
+     */
+    private String handleList() {
+        StringBuilder message =
+                new StringBuilder("These are the tasks in the list:\n");
+
+        for (int i = 0; i < tasks.getTaskCount(); i++) {
+            message.append(i + 1)
+                    .append(". ")
+                    .append(tasks.get(i))
+                    .append("\n");
+        }
+
+        return message.toString();
+    }
+
+    /**
+     * Handles the find command by searching for tasks containing a keyword.
+     *
+     * @param input User input containing the find command and keyword.
+     * @return Message containing the matching tasks.
+     * @throws AugustusException If no valid search keyword is provided.
+     */
+    private String handleFind(String input) throws AugustusException {
+        String keyword = Parser.parseFind(input);
+        ArrayList<Task> matchingTasks = tasks.find(keyword);
+
+        StringBuilder message =
+                new StringBuilder("Here are the matching tasks in your list:\n");
+
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            message.append(i + 1)
+                    .append(". ")
+                    .append(matchingTasks.get(i))
+                    .append("\n");
+        }
+
+        return message.toString();
+    }
+
+    /**
+     * Handles the delete command by removing a task and saving the updated list.
+     *
+     * @param input User input containing the task number to delete.
+     * @return Response message after deleting the task.
+     * @throws AugustusException If the task number is invalid or
+     *                           the updated task list cannot be saved.
+     */
+
+    private String handleDelete(String input) throws AugustusException {
+        int num = Parser.parseTaskNumber(input);
+
+        if (num < 1 || num > tasks.getTaskCount()) {
+            throw new AugustusException("Write a valid task number");
+        }
+
+        Task removedTask = tasks.delete(num - 1);
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getDeleteTaskMessage(removedTask.toString())
+                + "\n"
+                + ui.getTaskCountMessage(tasks.getTaskCount());
     }
 
     /**
