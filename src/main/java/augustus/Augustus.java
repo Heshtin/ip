@@ -266,7 +266,10 @@ public class Augustus {
      */
     private String handleDelete(String input) throws AugustusException {
         int index = getTaskIndex(input);
+        int previousCount = tasks.getTaskCount();
         Task removedTask = tasks.delete(index);
+        assert tasks.getTaskCount() == previousCount - 1
+                : "Task count should decrease";
 
         storage.saveTasks(tasks.getTasks());
 
@@ -283,7 +286,11 @@ public class Augustus {
      * @throws AugustusException If the task list cannot be saved.
      */
     private String addTask(Task task) throws AugustusException {
+        int previousCount = tasks.getTaskCount();
         tasks.add(task);
+
+        assert tasks.getTaskCount() == previousCount + 1
+                : "Task count should increase";
         storage.saveTasks(tasks.getTasks());
 
         return ui.getAddTaskMessage(task.toString())
