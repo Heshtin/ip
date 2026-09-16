@@ -99,7 +99,11 @@ public class Augustus {
                 } else if (command.equals("todo")) {
                     String description = Parser.parseTodo(input);
                     Task task = new ToDo(description);
+                    int previousCount = tasks.getTaskCount();
                     tasks.add(task);
+
+                    assert tasks.getTaskCount() == previousCount + 1
+                            : "Task count should increase";
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showAddTask(task.toString());
@@ -119,7 +123,11 @@ public class Augustus {
                     }
 
                     Task task = new Deadline(description, by);
+                    int previousCount = tasks.getTaskCount();
                     tasks.add(task);
+
+                    assert tasks.getTaskCount() == previousCount + 1
+                            : "Task count should increase";
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showAddTask(task.toString());
@@ -133,7 +141,11 @@ public class Augustus {
                     String to = details[2];
 
                     Task task = new Event(description, from, to);
+                    int previousCount = tasks.getTaskCount();
                     tasks.add(task);
+
+                    assert tasks.getTaskCount() == previousCount + 1
+                            : "Task count should increase";
 
                     storage.saveTasks(tasks.getTasks());
 
@@ -146,8 +158,11 @@ public class Augustus {
                     if (num < 1 || num > tasks.getTaskCount()) {
                         throw new AugustusException("Write a valid task number");
                     }
-
+                    int previousCount = tasks.getTaskCount();
                     Task removedTask = tasks.delete(num - 1);
+                    assert tasks.getTaskCount() == previousCount - 1
+                            : "Task count should decrease";
+
                     storage.saveTasks(tasks.getTasks());
 
                     ui.showMessage("Good, this task has been removed:\n" + "   " + removedTask);
