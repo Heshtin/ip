@@ -6,6 +6,7 @@ package augustus.task;
 public abstract class Task {
     private final String description;
     private boolean isDone;
+    private String tag = "";
 
     /**
      * Creates a task with the given description.
@@ -50,6 +51,33 @@ public abstract class Task {
     }
 
     /**
+     * Sets the tag of this task.
+     *
+     * @param tag Tag to assign to the task.
+     */
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    /**
+     * Returns the tag of this task.
+     *
+     * @return Tag assigned to the task.
+     */
+    public String getTag() {
+        return tag;
+    }
+
+    /**
+     * Returns the tag in storage format.
+     *
+     * @return Tag field to append when saving the task.
+     */
+    protected String getTagForStorage() {
+        return tag.isEmpty() ? "" : " | " + tag;
+    }
+
+    /**
      * Returns the display representation of this task.
      *
      * @return String containing the completion status and task description.
@@ -57,7 +85,13 @@ public abstract class Task {
     @Override
     public String toString() {
         String icon = isDone ? "X" : " ";
-        return "[" + icon + "] " + description;
+        String taskString = "[" + icon + "] " + description;
+
+        if (!tag.isEmpty()) {
+            taskString += " [#" + tag + "]";
+        }
+
+        return taskString;
     }
 
     /**

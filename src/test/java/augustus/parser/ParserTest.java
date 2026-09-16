@@ -105,4 +105,23 @@ public class ParserTest {
                 Parser.parseTaskNumber("mark abc"));
     }
 
+    @Test
+    public void parseTag_validInput_returnsTag() throws AugustusException {
+        String tag = Parser.parseTag("tag 2 /t school work");
+
+        assertEquals("school work", tag);
+    }
+
+    @Test
+    public void parseTag_missingTagSeparator_exceptionThrown() {
+        assertThrows(AugustusException.class, () ->
+                Parser.parseTag("tag 2 school"));
+    }
+
+    @Test
+    public void parseTag_emptyTag_exceptionThrown() {
+        assertThrows(AugustusException.class, () ->
+                Parser.parseTag("tag 2 /t "));
+    }
+
 }

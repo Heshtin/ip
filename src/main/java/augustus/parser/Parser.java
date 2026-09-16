@@ -16,6 +16,8 @@ public class Parser {
     private static final String EVENT_FROM_SEPARATOR = " /from ";
     private static final String EVENT_TO_SEPARATOR = " /to ";
 
+    private static final String TAG_COMMAND = "tag";
+    private static final String TAG_SEPARATOR = " /t ";
     /**
      * Returns the command word from the user's input
      *
@@ -139,4 +141,30 @@ public class Parser {
 
         return keyword;
     }
+
+    /**
+     * Extracts the tag from a tag command.
+     *
+     * @param input User input containing the tag command.
+     * @return Tag to assign to the task.
+     * @throws AugustusException If the tag command format is invalid.
+     */
+    public static String parseTag(String input) throws AugustusException {
+        int index = input.indexOf(TAG_SEPARATOR);
+
+        if (index == -1) {
+            throw new AugustusException("Use: tag TASK_NUMBER /t TAG");
+        }
+
+        String tag =
+                input.substring(index + TAG_SEPARATOR.length()).trim();
+
+        if (tag.isEmpty()) {
+            throw new AugustusException("A tag is required");
+        }
+
+        return tag;
+    }
+
+
 }

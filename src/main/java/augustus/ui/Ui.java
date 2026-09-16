@@ -89,6 +89,7 @@ public class Ui {
                 + " mark <number>\n"
                 + " unmark <number>\n"
                 + " delete <number>\n"
+                + " tag <number> /t (description)\n"
                 + " bye";
     }
 

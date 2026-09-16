@@ -55,6 +55,7 @@ public class TaskStorageTest {
         ArrayList<Task> tasks = storage.loadTasks();
         assertEquals(0, tasks.size());
     }
+
     @Test
     public void saveTasks_validTasks_savesCorrectly()
             throws IOException, AugustusException {
@@ -77,5 +78,44 @@ public class TaskStorageTest {
                 + "E | 0 | project meeting | 2pm | 4pm\n";
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void saveAndLoadTasks_withTags_tagsPreserved()
+            throws IOException, AugustusException {
+
+        Path file = tempDir.resolve("taggedTasks.txt");
+
+        TaskStorage storage = new TaskStorage(file.toString());
+        storage.createFile();
+
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        Task todo = new ToDo("read book");
+        todo.setTag("school work");
+
+        Task deadline = new Deadline(
+                "submit assignment",
+                LocalDate.of(2026, 9, 10));
+        deadline.setTag("urgent");
+
+        Task event = new Event(
+                "project meeting",
+                "2pm",
+                "4pm");
+        event.setTag("group project");
+
+        tasks.add(todo);
+        tasks.add(deadline);
+        tasks.add(event);
+
+        storage.saveTasks(tasks);
+
+        ArrayList<Task> loadedTasks = storage.loadTasks();
+
+        assertEquals(3, loadedTasks.size());
+        assertEquals("school work", loadedTasks.get(0).getTag());
+        assertEquals("urgent", loadedTasks.get(1).getTag());
+        assertEquals("group project", loadedTasks.get(2).getTag());
     }
 }
