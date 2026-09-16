@@ -38,6 +38,11 @@ public class Event extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("E | %s | %s | %s | %s", (isDone() ? "1" : "0"), getDescription(), startTime, endTime);
+        return String.format("E | %s | %s | %s | %s%s",
+                isDone() ? "1" : "0",
+                getDescription(),
+                startTime,
+                endTime,
+                getTagForStorage());
     }
 }

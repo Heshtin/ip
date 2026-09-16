@@ -114,22 +114,39 @@ public class TaskStorage {
         String description = segments[2];
 
         Task task;
+        String tag = "";
 
         if (taskType.equals("T")) {
             task = new ToDo(description);
+
+            if (segments.length > 3) {
+                tag = segments[3];
+            }
         } else if (taskType.equals("D")) {
             LocalDate by = LocalDate.parse(segments[3]);
             task = new Deadline(description, by);
+
+            if (segments.length > 4) {
+                tag = segments[4];
+            }
         } else if (taskType.equals("E")) {
             String from = segments[3];
             String to = segments[4];
             task = new Event(description, from, to);
+
+            if (segments.length > 5) {
+                tag = segments[5];
+            }
         } else {
             throw new AugustusException("Invalid task type in data file");
         }
 
         if (isMarked) {
             task.markDone();
+        }
+
+        if (!tag.isEmpty()) {
+            task.setTag(tag);
         }
 
         return task;

@@ -95,6 +95,8 @@ public class Augustus {
                 return handleEvent(input);
             } else if (command.equals("delete")) {
                 return handleDelete(input);
+            } else if (command.equals("tag")) {
+                return handleTag(input);
             } else if (command.equals("bye")) {
                 return ui.getExitMessage();
             }
@@ -316,6 +318,23 @@ public class Augustus {
         }
 
         return message.toString();
+    }
+
+    /**
+     * Assigns a tag to the specified task.
+     *
+     * @param input User input containing the task number and tag.
+     * @return Response message after tagging the task.
+     * @throws AugustusException If the task number or tag is invalid.
+     */
+    private String handleTag(String input) throws AugustusException {
+        String tag = Parser.parseTag(input);
+        Task task = getTask(input);
+
+        task.setTag(tag);
+        storage.saveTasks(tasks.getTasks());
+
+        return "Tagged task:\n" + task;
     }
 
     /**

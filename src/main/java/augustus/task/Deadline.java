@@ -41,7 +41,10 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("D | %s | %s | %s", (isDone() ? "1" : "0"),
-                getDescription(), dueDate);
+        return String.format("D | %s | %s | %s%s",
+                isDone() ? "1" : "0",
+                getDescription(),
+                dueDate,
+                getTagForStorage());
     }
 }
