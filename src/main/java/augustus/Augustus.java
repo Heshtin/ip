@@ -36,7 +36,7 @@ public class Augustus {
             storage.createFile();
             tasks = new TaskList(storage.loadTasks());
         } catch (AugustusException e) {
-            ui.showError(e.getMessage());
+            ui.showMessage(ui.getErrorMessage(e.getMessage()));
             tasks = new TaskList();
         }
     }
@@ -45,14 +45,14 @@ public class Augustus {
      * Starts the main command loop and processes user commands until the user exits.
      */
     public void run() {
-        ui.showIntro();
+        ui.showMessage(ui.getIntroMessage());
         while (true) {
             String input = ui.readLine();
             try {
                 String command = Parser.getCommand(input);
 
                 if (command.equals("bye")) {
-                    ui.showExit();
+                    ui.showMessage(ui.getExitMessage());
                     break;
                 } else if (command.equals("list")) {
                     StringBuilder listMessage = new StringBuilder("These are the tasks in the list: \n");
@@ -83,7 +83,7 @@ public class Augustus {
                     task.markDone();
                     storage.saveTasks(tasks.getTasks());
 
-                    ui.showMessage("I have marked this task as done:\n" + "   " + task);
+                    ui.showMessage(ui.getMarkTaskMessage(task.toString()));
 
                 } else if (command.equals("unmark")) {
                     int num = Parser.parseTaskNumber(input);
@@ -94,16 +94,15 @@ public class Augustus {
                     task.markNotDone();
 
                     storage.saveTasks(tasks.getTasks());
-                    ui.showMessage("I have marked this task as undone:\n" + "   " + task);
-
+                    ui.showMessage(ui.getUnmarkTaskMessage(task.toString()));
                 } else if (command.equals("todo")) {
                     String description = Parser.parseTodo(input);
                     Task task = new ToDo(description);
                     tasks.add(task);
                     storage.saveTasks(tasks.getTasks());
 
-                    ui.showAddTask(task.toString());
-                    ui.showTaskCount(tasks.getTaskCount());
+                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
+                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
 
                 } else if (command.equals("deadline")) {
                     String[] details = Parser.parseDeadline(input);
@@ -122,8 +121,8 @@ public class Augustus {
                     tasks.add(task);
                     storage.saveTasks(tasks.getTasks());
 
-                    ui.showAddTask(task.toString());
-                    ui.showTaskCount(tasks.getTaskCount());
+                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
+                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
 
                 } else if (command.equals("event")) {
                     String[] details = Parser.parseEvent(input);
@@ -137,8 +136,8 @@ public class Augustus {
 
                     storage.saveTasks(tasks.getTasks());
 
-                    ui.showAddTask(task.toString());
-                    ui.showTaskCount(tasks.getTaskCount());
+                    ui.showMessage(ui.getAddTaskMessage(task.toString()));
+                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
 
                 } else if (command.equals("delete")) {
                     int num = Parser.parseTaskNumber(input);
@@ -150,13 +149,13 @@ public class Augustus {
                     Task removedTask = tasks.delete(num - 1);
                     storage.saveTasks(tasks.getTasks());
 
-                    ui.showMessage("Good, this task has been removed:\n" + "   " + removedTask);
-                    ui.showTaskCount(tasks.getTaskCount());
+                    ui.showMessage(ui.getDeleteTaskMessage(removedTask.toString()));
+                    ui.showMessage(ui.getTaskCountMessage(tasks.getTaskCount()));
                 } else {
-                    ui.showCommands();
+                    ui.showMessage(ui.getCommandsMessage());
                 }
             } catch (AugustusException e) {
-                ui.showError(e.getMessage());
+                ui.showMessage(ui.getErrorMessage(e.getMessage()));
             }
         }
         ui.closeScanner();
@@ -173,8 +172,7 @@ public class Augustus {
             String command = Parser.getCommand(input);
 
             if (command.equals("bye")) {
-                return "Bye. Thank you for using this chatbot!\n"
-                        + "Hope to see you again soon!";
+                return ui.getExitMessage();
             } else if (command.equals("list")) {
                 StringBuilder message =
                         new StringBuilder("These are the tasks in the list:\n");
@@ -215,7 +213,7 @@ public class Augustus {
                 task.markDone();
                 storage.saveTasks(tasks.getTasks());
 
-                return "I have marked this task as done:\n   " + task;
+                return ui.getMarkTaskMessage(task.toString());
 
             } else if (command.equals("unmark")) {
                 int num = Parser.parseTaskNumber(input);
@@ -228,7 +226,7 @@ public class Augustus {
                 task.markNotDone();
                 storage.saveTasks(tasks.getTasks());
 
-                return "I have marked this task as undone:\n   " + task;
+                return ui.getUnmarkTaskMessage(task.toString());
 
             } else if (command.equals("todo")) {
                 String description = Parser.parseTodo(input);
@@ -236,10 +234,9 @@ public class Augustus {
 
                 tasks.add(task);
                 storage.saveTasks(tasks.getTasks());
-
-                return "Got it. I've added this task:\n"
-                        + "   " + task
-                        + "\nThe empire now holds " + tasks.getTaskCount() + " tasks.";
+                return ui.getAddTaskMessage(task.toString())
+                        + "\n"
+                        + ui.getTaskCountMessage(tasks.getTaskCount());
 
             } else if (command.equals("deadline")) {
                 String[] details = Parser.parseDeadline(input);
@@ -259,9 +256,9 @@ public class Augustus {
                 tasks.add(task);
                 storage.saveTasks(tasks.getTasks());
 
-                return "Got it. I've added this task:\n"
-                        + "   " + task
-                        + "\nThe empire now holds " + tasks.getTaskCount() + " tasks.";
+                return ui.getAddTaskMessage(task.toString())
+                        + "\n"
+                        + ui.getTaskCountMessage(tasks.getTaskCount());
 
             } else if (command.equals("event")) {
                 String[] details = Parser.parseEvent(input);
@@ -274,9 +271,9 @@ public class Augustus {
                 tasks.add(task);
                 storage.saveTasks(tasks.getTasks());
 
-                return "Got it. I've added this task:\n"
-                        + "   " + task
-                        + "\nThe empire now holds " + tasks.getTaskCount() + " tasks.";
+                return ui.getAddTaskMessage(task.toString())
+                        + "\n"
+                        + ui.getTaskCountMessage(tasks.getTaskCount());
 
             } else if (command.equals("delete")) {
                 int num = Parser.parseTaskNumber(input);
@@ -288,15 +285,15 @@ public class Augustus {
                 Task removedTask = tasks.delete(num - 1);
                 storage.saveTasks(tasks.getTasks());
 
-                return "Good, this task has been removed:\n"
-                        + "   " + removedTask
-                        + "\nThe empire now holds " + tasks.getTaskCount() + " tasks.";
+                return ui.getDeleteTaskMessage(removedTask.toString())
+                        + "\n"
+                        + ui.getTaskCountMessage(tasks.getTaskCount());
             }
 
-            return "Augustus does not recognise that command.";
+            return ui.getCommandsMessage();
 
         } catch (AugustusException e) {
-            return "ERROR: " + e.getMessage();
+            return ui.getErrorMessage(e.getMessage());
         }
     }
 
