@@ -21,9 +21,17 @@ import augustus.ui.Ui;
 public class Augustus {
     private static final String DEFAULT_FILE_PATH = "./src/data/augustus.txt";
 
-    private TaskStorage storage;
+    private final TaskStorage storage;
     private TaskList tasks;
-    private Ui ui;
+    private final Ui ui;
+
+    /**
+     * Creates an Augustus chatbot using the default storage file.
+     */
+    public Augustus() {
+        this(DEFAULT_FILE_PATH);
+    }
+
     /**
      * Creates an Augustus chatbot using the specified file for task storage.
      *
@@ -76,9 +84,9 @@ public class Augustus {
             } else if (command.equals("find")) {
                 return handleFind(input);
             } else if (command.equals("mark")) {
-                return handleMark(input, true);
+                return handleMark(input);
             } else if (command.equals("unmark")) {
-                return handleMark(input, false);
+                return handleUnmark(input);
             } else if (command.equals("todo")) {
                 return handleTodo(input);
             } else if (command.equals("deadline")) {
@@ -110,12 +118,7 @@ public class Augustus {
         String description = Parser.parseTodo(input);
         Task task = new ToDo(description);
 
-        tasks.add(task);
-        storage.saveTasks(tasks.getTasks());
-
-        return ui.getAddTaskMessage(task.toString())
-                + "\n"
-                + ui.getTaskCountMessage(tasks.getTaskCount());
+        return addTask(task);
     }
 
     /**
@@ -141,12 +144,7 @@ public class Augustus {
 
         Task task = new Deadline(description, by);
 
-        tasks.add(task);
-        storage.saveTasks(tasks.getTasks());
-
-        return ui.getAddTaskMessage(task.toString())
-                + "\n"
-                + ui.getTaskCountMessage(tasks.getTaskCount());
+        return addTask(task);
     }
 
     /**
@@ -166,45 +164,67 @@ public class Augustus {
 
         Task task = new Event(description, from, to);
 
-        tasks.add(task);
-        storage.saveTasks(tasks.getTasks());
-
-        return ui.getAddTaskMessage(task.toString())
-                + "\n"
-                + ui.getTaskCountMessage(tasks.getTaskCount());
+        return addTask(task);
     }
 
     /**
-     * Handles marking or unmarking a task and saves the updated task list.
+     * Marks the specified task as done.
      *
      * @param input User input containing the task number.
-     * @param isMark {@code true} to mark the task as done,
-     *               {@code false} to mark it as not done.
-     * @return Response message after updating the task.
-     * @throws AugustusException If the task number is invalid or
-     *                           the task list cannot be saved.
+     * @return Response message after marking the task.
+     * @throws AugustusException If the task number is invalid.
      */
-    private String handleMark(String input, boolean isMark) throws AugustusException {
+    private String handleMark(String input) throws AugustusException {
+        Task task = getTask(input);
+
+        task.markDone();
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getMarkTaskMessage(task.toString());
+    }
+
+    /**
+     * Marks the specified task as not done.
+     *
+     * @param input User input containing the task number.
+     * @return Response message after unmarking the task.
+     * @throws AugustusException If the task number is invalid.
+     */
+    private String handleUnmark(String input) throws AugustusException {
+        Task task = getTask(input);
+
+        task.markNotDone();
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getUnmarkTaskMessage(task.toString());
+    }
+
+    /**
+     * Returns the index of the task specified by the user.
+     *
+     * @param input User input containing the task number.
+     * @return Index of the specified task.
+     * @throws AugustusException If the task number is invalid.
+     */
+    private int getTaskIndex(String input) throws AugustusException {
         int num = Parser.parseTaskNumber(input);
 
         if (num < 1 || num > tasks.getTaskCount()) {
             throw new AugustusException("Write a valid task number");
         }
 
-        Task task = tasks.get(num - 1);
-        if (isMark) {
-            task.markDone();
-        } else {
-            task.markNotDone();
-        }
+        return num - 1;
+    }
 
-        storage.saveTasks(tasks.getTasks());
-
-        if (isMark) {
-            return ui.getMarkTaskMessage(task.toString());
-        } else {
-            return ui.getUnmarkTaskMessage(task.toString());
-        }
+    /**
+     * Returns the task specified by the user.
+     *
+     * @param input User input containing the task number.
+     * @return The specified task.
+     * @throws AugustusException If the task number is invalid.
+     */
+    private Task getTask(String input) throws AugustusException {
+        return tasks.get(getTaskIndex(input));
     }
 
     /**
@@ -213,17 +233,10 @@ public class Augustus {
      * @return Message containing the numbered task list.
      */
     private String handleList() {
-        StringBuilder message =
-                new StringBuilder("These are the tasks in the list:\n");
-
-        for (int i = 0; i < tasks.getTaskCount(); i++) {
-            message.append(i + 1)
-                    .append(". ")
-                    .append(tasks.get(i))
-                    .append("\n");
-        }
-
-        return message.toString();
+        return formatTasks(
+                "These are the tasks in the list:\n",
+                tasks.getTasks()
+        );
     }
 
     /**
@@ -237,17 +250,10 @@ public class Augustus {
         String keyword = Parser.parseFind(input);
         ArrayList<Task> matchingTasks = tasks.find(keyword);
 
-        StringBuilder message =
-                new StringBuilder("Here are the matching tasks in your list:\n");
-
-        for (int i = 0; i < matchingTasks.size(); i++) {
-            message.append(i + 1)
-                    .append(". ")
-                    .append(matchingTasks.get(i))
-                    .append("\n");
-        }
-
-        return message.toString();
+        return formatTasks(
+                "Here are the matching tasks in your list:\n",
+                matchingTasks
+        );
     }
 
     /**
@@ -258,15 +264,10 @@ public class Augustus {
      * @throws AugustusException If the task number is invalid or
      *                           the updated task list cannot be saved.
      */
-
     private String handleDelete(String input) throws AugustusException {
-        int num = Parser.parseTaskNumber(input);
+        int index = getTaskIndex(input);
+        Task removedTask = tasks.delete(index);
 
-        if (num < 1 || num > tasks.getTaskCount()) {
-            throw new AugustusException("Write a valid task number");
-        }
-
-        Task removedTask = tasks.delete(num - 1);
         storage.saveTasks(tasks.getTasks());
 
         return ui.getDeleteTaskMessage(removedTask.toString())
@@ -275,12 +276,48 @@ public class Augustus {
     }
 
     /**
+     * Adds a task, saves the task list, and returns the response message.
+     *
+     * @param task Task to add.
+     * @return Response message after adding the task.
+     * @throws AugustusException If the task list cannot be saved.
+     */
+    private String addTask(Task task) throws AugustusException {
+        tasks.add(task);
+        storage.saveTasks(tasks.getTasks());
+
+        return ui.getAddTaskMessage(task.toString())
+                + "\n"
+                + ui.getTaskCountMessage(tasks.getTaskCount());
+    }
+
+    /**
+     * Creates a numbered message for the given tasks.
+     *
+     * @param header Header of the message.
+     * @param tasksToDisplay Tasks to include.
+     * @return Formatted task list.
+     */
+    private String formatTasks(String header, ArrayList<Task> tasksToDisplay) {
+        StringBuilder message = new StringBuilder(header);
+
+        for (int i = 0; i < tasksToDisplay.size(); i++) {
+            message.append(i + 1)
+                    .append(". ")
+                    .append(tasksToDisplay.get(i))
+                    .append("\n");
+        }
+
+        return message.toString();
+    }
+
+    /**
      * Starts the Augustus chatbot application.
      *
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        new Augustus(DEFAULT_FILE_PATH).run();
+        new Augustus().run();
     }
 }
 

@@ -14,9 +14,6 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private final Augustus augustus =
-            new Augustus("./src/data/augustus.txt");
-
     /**
      * Starts the JavaFX GUI.
      *
@@ -25,6 +22,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            Augustus augustus = new Augustus();
+
             FXMLLoader fxmlLoader =
                     new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
 
@@ -39,7 +38,7 @@ public class Main extends Application {
 
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to load main window", e);
         }
     }
 }
