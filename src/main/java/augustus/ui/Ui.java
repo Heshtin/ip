@@ -3,7 +3,7 @@ package augustus.ui;
 import java.util.Scanner;
 
 /**
- * Handles user input and displays messages to the user
+ * Handles user input and creates messages to display to the user.
  */
 public class Ui {
     private static final String BORDER = "__________________________";
@@ -17,28 +17,28 @@ public class Ui {
     }
 
     /**
-     * Displays the welcome message when Augustus starts
+     * Returns the welcome message.
+     *
+     * @return Welcome message.
      */
-    public void showIntro() {
-        System.out.println(BORDER);
-        System.out.println("Hello! I'm Augustus");
-        System.out.println("What can I do for you?");
-        System.out.println(BORDER);
+    public String getIntroMessage() {
+        return "Hello! I'm Augustus\n"
+                + "What can I do for you?";
     }
 
     /**
-     * Reads the next line of user input
+     * Reads the next line of user input.
      *
-     * @return the line entered by the user
+     * @return The line entered by the user.
      */
     public String readLine() {
         return scanner.nextLine();
     }
 
     /**
-     * Displays a message surrounded by borders
+     * Displays a message surrounded by borders.
      *
-     * @param message Message to display
+     * @param message Message to display.
      */
     public void showMessage(String message) {
         System.out.println(BORDER);
@@ -47,25 +47,23 @@ public class Ui {
     }
 
     /**
-     * Displays the error message to the user
+     * Returns an error message.
      *
-     * @param message Error message to display
+     * @param message Error message.
+     * @return Formatted error message.
      */
-    public void showError(String message) {
-        System.out.println(BORDER);
-        System.out.println("ERROR: " + message);
-        System.out.println(BORDER);
+    public String getErrorMessage(String message) {
+        return "ERROR: " + message;
     }
 
     /**
-     * Displays the farewell message when Augustus exits.
+     * Returns the farewell message.
+     *
+     * @return Farewell message.
      */
-    public void showExit() {
-        System.out.println(BORDER);
-        System.out.println("Bye. Thank you for using this chatbot");
-        System.out.println(BORDER);
-        System.out.println("Hope to see you again soon!");
-        System.out.println(BORDER);
+    public String getExitMessage() {
+        return "Bye. Thank you for using this chatbot\n"
+                + "Hope to see you again soon!";
     }
 
     /**
@@ -76,10 +74,12 @@ public class Ui {
     }
 
     /**
-     * Displays the available commands when an unrecognized command is entered.
+     * Returns the available commands.
+     *
+     * @return Available commands message.
      */
-    public void showCommands() {
-        String commands = "Augustus does not recognise that command.\n"
+    public String getCommandsMessage() {
+        return "Augustus does not recognise that command.\n"
                 + "Available commands:\n"
                 + " todo <description>\n"
                 + " deadline <description> /by yyyy-MM-dd\n"
@@ -90,24 +90,59 @@ public class Ui {
                 + " unmark <number>\n"
                 + " delete <number>\n"
                 + " bye";
-        this.showMessage(commands);
     }
 
     /**
-     * Displays a message indicating that a task was added.
+     * Returns a message indicating that a task was added.
      *
      * @param task Task that was added.
+     * @return Task added message.
      */
-    public void showAddTask(String task) {
-        this.showMessage("By order of Augustus, this task has been added:\n" + "   " + task);
+    public String getAddTaskMessage(String task) {
+        return "By order of Augustus, this task has been added:\n"
+                + "   " + task;
     }
 
     /**
-     * Displays the number of tasks currently stored.
+     * Returns the current task count message.
      *
      * @param num Number of tasks.
+     * @return Task count message.
      */
-    public void showTaskCount(int num) {
-        this.showMessage("The empire now holds " + num + " tasks.");
+    public String getTaskCountMessage(int num) {
+        return "The empire now holds " + num + " tasks.";
+    }
+
+    /**
+     * Returns a message indicating that a task was marked as done.
+     *
+     * @param task Task that was marked.
+     * @return Task marked message.
+     */
+    public String getMarkTaskMessage(String task) {
+        return "I have marked this task as done:\n"
+                + "   " + task;
+    }
+
+    /**
+     * Returns a message indicating that a task was marked as undone.
+     *
+     * @param task Task that was unmarked.
+     * @return Task unmarked message.
+     */
+    public String getUnmarkTaskMessage(String task) {
+        return "I have marked this task as undone:\n"
+                + "   " + task;
+    }
+
+    /**
+     * Returns a message indicating that a task was deleted.
+     *
+     * @param task Task that was deleted.
+     * @return Task deleted message.
+     */
+    public String getDeleteTaskMessage(String task) {
+        return "Good, this task has been removed:\n"
+                + "   " + task;
     }
 }

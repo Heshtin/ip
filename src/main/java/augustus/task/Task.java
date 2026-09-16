@@ -4,7 +4,7 @@ package augustus.task;
  * Represents a task with a description and completion status.
  */
 public abstract class Task {
-    private String description;
+    private final String description;
     private boolean isDone;
 
     /**

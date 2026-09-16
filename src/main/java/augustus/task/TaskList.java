@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Manages the collection of tasks in Augustus.
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Creates an empty task list.

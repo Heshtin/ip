@@ -25,16 +25,22 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Creates a dialog box with the given text and image.
+     *
+     * @param text Text to display in the dialog box.
+     * @param img Image to display beside the text.
+     */
     private DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader =
-                    new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+                    new FXMLLoader(DialogBox.class.getResource("/view/DialogBox.fxml"));
 
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to load dialog box", e);
         }
 
         dialog.setText(text);
@@ -73,8 +79,8 @@ public class DialogBox extends HBox {
      * @return Augustus dialog box
      */
     public static DialogBox getAugustusDialog(String text, Image img) {
-        DialogBox db = new DialogBox(text, img);
-        db.flip();
-        return db;
+        DialogBox dialogBox = new DialogBox(text, img);
+        dialogBox.flip();
+        return dialogBox;
     }
 }

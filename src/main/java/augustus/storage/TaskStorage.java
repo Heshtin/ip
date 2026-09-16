@@ -17,7 +17,7 @@ import augustus.task.ToDo;
  * Handles the saving and loading of tasks from a data file
  */
 public class TaskStorage {
-    private String filePath;
+    private final String filePath;
 
     /**
      * Creates a TaskStorage that uses the specified file path
@@ -76,43 +76,63 @@ public class TaskStorage {
      */
     public ArrayList<Task> loadTasks() throws AugustusException {
         ArrayList<Task> tasks = new ArrayList<>();
+
         try {
             File file = new File(filePath);
             Scanner scanner = new Scanner(file);
+
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+
                 if (line.isBlank()) {
                     continue;
                 }
-                String[] segments = line.split(" \\| ");
-                String taskType = segments[0];
-                boolean isMarked = segments[1].equals("1");
-                String description = segments[2];
-                Task task;
-                if (taskType.equals("T")) {
-                    task = new ToDo(description);
-                } else if (taskType.equals("D")) {
-                    LocalDate by = LocalDate.parse(segments[3]);
-                    task = new Deadline(description, by);
-                } else if (taskType.equals("E")) {
-                    String from = segments[3];
-                    String to = segments[4];
-                    task = new Event(description, from, to);
-                } else {
-                    throw new AugustusException("Invalid task type in data file");
-                }
-                if (isMarked) {
-                    task.markDone();
-                }
-                tasks.add(task);
+
+                tasks.add(parseTask(line));
             }
 
             scanner.close();
-
         } catch (IOException e) {
             throw new AugustusException("Unable to load tasks");
         }
+
         return tasks;
+    }
+
+    /**
+     * Converts a stored task record into a task.
+     *
+     * @param line Stored task record.
+     * @return Task represented by the record.
+     * @throws AugustusException If the task type is invalid.
+     */
+    private Task parseTask(String line) throws AugustusException {
+        String[] segments = line.split(" \\| ");
+
+        String taskType = segments[0];
+        boolean isMarked = segments[1].equals("1");
+        String description = segments[2];
+
+        Task task;
+
+        if (taskType.equals("T")) {
+            task = new ToDo(description);
+        } else if (taskType.equals("D")) {
+            LocalDate by = LocalDate.parse(segments[3]);
+            task = new Deadline(description, by);
+        } else if (taskType.equals("E")) {
+            String from = segments[3];
+            String to = segments[4];
+            task = new Event(description, from, to);
+        } else {
+            throw new AugustusException("Invalid task type in data file");
+        }
+
+        if (isMarked) {
+            task.markDone();
+        }
+
+        return task;
     }
 
 }

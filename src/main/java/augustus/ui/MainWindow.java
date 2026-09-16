@@ -17,6 +17,8 @@ import javafx.util.Duration;
  */
 public class MainWindow extends AnchorPane {
 
+    private static final double EXIT_DELAY_SECONDS = 1.0;
+
     @FXML
     private ScrollPane scrollPane;
 
@@ -33,7 +35,6 @@ public class MainWindow extends AnchorPane {
 
     private final Image userImage =
             new Image(this.getClass().getResourceAsStream("/images/PublicUser.png"));
-
     private final Image augustusImage =
             new Image(this.getClass().getResourceAsStream("/images/AugustusPic.png"));
 
@@ -75,7 +76,7 @@ public class MainWindow extends AnchorPane {
         userInput.clear();
 
         if (input.trim().equalsIgnoreCase("bye")) {
-            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+            PauseTransition delay = new PauseTransition(Duration.seconds(EXIT_DELAY_SECONDS));
             delay.setOnFinished(event -> Platform.exit());
             delay.play();
         }

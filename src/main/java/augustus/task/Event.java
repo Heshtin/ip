@@ -5,8 +5,8 @@ package augustus.task;
  */
 public class Event extends Task {
 
-    protected String startTime;
-    protected String endTime;
+    private final String startTime;
+    private final String endTime;
 
     /**
      * Creates an event with the given description, start time, and end time.

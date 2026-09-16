@@ -8,7 +8,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class Deadline extends Task {
 
-    protected LocalDate dueDate;
+    private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d yyyy");
+    private final LocalDate dueDate;
 
     /**
      * Creates a deadline task with the given description and due date.
@@ -28,8 +30,8 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
-        return String.format("[D]%s (by: %s)", super.toString(), dueDate.format(formatter));
+        return String.format("[D]%s (by: %s)", super.toString(),
+                dueDate.format(DISPLAY_DATE_FORMAT));
     }
 
     /**
@@ -39,6 +41,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileString() {
-        return String.format("D | %s | %s | %s", (isDone() ? "1" : "0"), getDescription(), dueDate);
+        return String.format("D | %s | %s | %s", (isDone() ? "1" : "0"),
+                getDescription(), dueDate);
     }
 }
