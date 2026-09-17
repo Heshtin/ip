@@ -20,8 +20,8 @@ public class MainWindow extends AnchorPane {
     private static final double EXIT_DELAY_SECONDS = 1.0;
 
     private static final String WELCOME_MESSAGE =
-            "Welcome to Augustus!\n"
-                    + "I'm here to help you manage your tasks.\n"
+            "Greetings. You stand before Augustus.\n"
+                    + "State your task, and it shall be recorded.\n"
                     + "Try: todo | deadline | event | list | find | bye";
     @FXML
     private ScrollPane scrollPane;

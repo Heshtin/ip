@@ -15,10 +15,16 @@
 }
 
 .reply-label {
-    -fx-background-color: rgba(245, 222, 179, 0.92);
+    -fx-background-color: #f6e7bd;
+    -fx-text-fill: #4b2e16;
 
-    -fx-background-radius: 12px 12px 12px 2px;
-    -fx-border-radius: 12px 12px 12px 2px;
+    -fx-border-color: #a87532;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 16px;
 }
 
 #displayPicture {
