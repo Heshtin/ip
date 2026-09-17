@@ -13,11 +13,17 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Circle;
+import javafx.scene.layout.VBox;
 
 /**
  * Represents a dialog box containing a message and an avatar.
  */
 public class DialogBox extends HBox {
+
+    private static final double AVATAR_SIZE = 64;
 
     @FXML
     private Label dialog;
@@ -45,6 +51,30 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        double imageWidth = img.getWidth();
+        double imageHeight = img.getHeight();
+
+        double cropSize = Math.min(imageWidth, imageHeight);
+
+        double x = (imageWidth - cropSize) / 2;
+        double y = (imageHeight - cropSize) / 2;
+
+        displayPicture.setViewport(
+                new Rectangle2D(x, y, cropSize, cropSize)
+        );
+
+        displayPicture.setFitWidth(AVATAR_SIZE);
+        displayPicture.setFitHeight(AVATAR_SIZE);
+        displayPicture.setPreserveRatio(true);
+
+        Circle clip = new Circle(
+                AVATAR_SIZE / 2,
+                AVATAR_SIZE / 2,
+                AVATAR_SIZE / 2
+        );
+
+        displayPicture.setClip(clip);
     }
 
     /**
@@ -68,7 +98,10 @@ public class DialogBox extends HBox {
      * @return user dialog box
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        DialogBox dialogBox = new DialogBox(text, img);
+        dialogBox.dialog.getStyleClass().add("user-label");
+        dialogBox.getStyleClass().add("user-dialog");
+        return dialogBox;
     }
 
     /**
@@ -81,6 +114,52 @@ public class DialogBox extends HBox {
     public static DialogBox getAugustusDialog(String text, Image img) {
         DialogBox dialogBox = new DialogBox(text, img);
         dialogBox.flip();
+        dialogBox.getStyleClass().add("augustus-dialog");
+        return dialogBox;
+    }
+
+    /**
+     * Creates an error dialog box for Augustus.
+     *
+     * @param text error message from Augustus
+     * @param img Augustus's image
+     * @return Augustus error dialog box
+     */
+    public static DialogBox getErrorDialog(String text, Image img) {
+        DialogBox dialogBox = new DialogBox(text, img);
+        dialogBox.flip();
+
+        String errorMessage = text.replaceFirst("^ERROR:\\s*", "");
+
+        dialogBox.dialog.setText("⚠ ERROR\n" + errorMessage);
+
+        dialogBox.dialog.setStyle(
+                "-fx-background-color: #ffd6d6;"
+                        + "-fx-text-fill: #8b1a1a;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-border-color: #c94c4c;"
+                        + "-fx-border-width: 1.5;"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;"
+        );
+
+        return dialogBox;
+    }
+
+    public static DialogBox getWelcomeDialog(String text, Image img) {
+        DialogBox dialogBox = new DialogBox(text, img);
+        dialogBox.flip();
+
+        dialogBox.dialog.setStyle(
+                "-fx-background-color: #dbeafe;"
+                        + "-fx-text-fill: #1e3a5f;"
+                        + "-fx-border-color: #6ea8d7;"
+                        + "-fx-border-width: 1.5;"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-padding: 10 14 10 14;"
+        );
+
         return dialogBox;
     }
 }

@@ -19,6 +19,10 @@ public class MainWindow extends AnchorPane {
 
     private static final double EXIT_DELAY_SECONDS = 1.0;
 
+    private static final String WELCOME_MESSAGE =
+            "Welcome to Augustus!\n"
+                    + "I'm here to help you manage your tasks.\n"
+                    + "Try: todo | deadline | event | list | find | bye";
     @FXML
     private ScrollPane scrollPane;
 
@@ -53,6 +57,10 @@ public class MainWindow extends AnchorPane {
      */
     public void setAugustus(Augustus augustus) {
         this.augustus = augustus;
+
+        dialogContainer.getChildren().add(
+                DialogBox.getWelcomeDialog(WELCOME_MESSAGE, augustusImage)
+        );
     }
 
     /**
@@ -68,9 +76,20 @@ public class MainWindow extends AnchorPane {
 
         String response = augustus.getResponse(input);
 
+        boolean isError = response.startsWith("ERROR:")
+                || response.startsWith("Augustus does not recognise that command.");
+
+        DialogBox augustusDialog;
+
+        if (isError) {
+            augustusDialog = DialogBox.getErrorDialog(response, augustusImage);
+        } else {
+            augustusDialog = DialogBox.getAugustusDialog(response, augustusImage);
+        }
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getAugustusDialog(response, augustusImage)
+                augustusDialog
         );
 
         userInput.clear();
