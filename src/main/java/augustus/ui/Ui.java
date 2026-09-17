@@ -22,8 +22,8 @@ public class Ui {
      * @return Welcome message.
      */
     public String getIntroMessage() {
-        return "Hello! I'm Augustus\n"
-                + "What can I do for you?";
+        return "Greetings. You stand before Augustus.\n"
+                + "State your task, and it shall be recorded.";
     }
 
     /**
@@ -62,8 +62,8 @@ public class Ui {
      * @return Farewell message.
      */
     public String getExitMessage() {
-        return "Bye. Thank you for using this chatbot\n"
-                + "Hope to see you again soon!";
+        return "You are dismissed.\n"
+                + "May your duties be completed with honour.";
     }
 
     /**
@@ -80,17 +80,9 @@ public class Ui {
      */
     public String getCommandsMessage() {
         return "Augustus does not recognise that command.\n"
-                + "Available commands:\n"
-                + " todo <description>\n"
-                + " deadline <description> /by yyyy-MM-dd\n"
-                + " event <description> /from (start) /to (end)\n"
-                + " list\n"
-                + " find <keyword>\n"
-                + " mark <number>\n"
-                + " unmark <number>\n"
-                + " delete <number>\n"
-                + " tag <number> /t (description)\n"
-                + " bye";
+                + "State a valid command:\n"
+                + "todo | deadline | event | list | find | "
+                + "mark | unmark | delete | tag | bye";
     }
 
     /**
@@ -100,7 +92,7 @@ public class Ui {
      * @return Task added message.
      */
     public String getAddTaskMessage(String task) {
-        return "By order of Augustus, this task has been added:\n"
+        return "By my decree, this task shall be recorded:\n"
                 + "   " + task;
     }
 
@@ -111,7 +103,7 @@ public class Ui {
      * @return Task count message.
      */
     public String getTaskCountMessage(int num) {
-        return "The empire now holds " + num + " tasks.";
+        return "My records now contain " + num + " tasks.";
     }
 
     /**
@@ -121,7 +113,7 @@ public class Ui {
      * @return Task marked message.
      */
     public String getMarkTaskMessage(String task) {
-        return "I have marked this task as done:\n"
+        return "Well done. I declare this task complete:\n"
                 + "   " + task;
     }
 
@@ -132,7 +124,7 @@ public class Ui {
      * @return Task unmarked message.
      */
     public String getUnmarkTaskMessage(String task) {
-        return "I have marked this task as undone:\n"
+        return "So be it. This task returns to active duty:\n"
                 + "   " + task;
     }
 
@@ -143,7 +135,7 @@ public class Ui {
      * @return Task deleted message.
      */
     public String getDeleteTaskMessage(String task) {
-        return "Good, this task has been removed:\n"
+        return "By my order, this task has been removed from the records:\n"
                 + "   " + task;
     }
 }

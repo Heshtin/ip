@@ -8,22 +8,20 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Circle;
-import javafx.scene.layout.VBox;
 
 /**
  * Represents a dialog box containing a message and an avatar.
  */
 public class DialogBox extends HBox {
 
-    private static final double AVATAR_SIZE = 64;
+    private static final double AVATAR_SIZE = 72;
 
     @FXML
     private Label dialog;

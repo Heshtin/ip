@@ -236,7 +236,7 @@ public class Augustus {
      */
     private String handleList() {
         return formatTasks(
-                "These are the tasks in the list:\n",
+                "Behold the tasks recorded under my rule:\n",
                 tasks.getTasks()
         );
     }
@@ -253,7 +253,7 @@ public class Augustus {
         ArrayList<Task> matchingTasks = tasks.find(keyword);
 
         return formatTasks(
-                "Here are the matching tasks in your list:\n",
+                "I have searched my records. These tasks match your request:\n",
                 matchingTasks
         );
     }
@@ -334,7 +334,7 @@ public class Augustus {
         task.setTag(tag);
         storage.saveTasks(tasks.getTasks());
 
-        return "Tagged task:\n" + task;
+        return "This task shall bear the following mark:\n" + task;
     }
 
     /**
