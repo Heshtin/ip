@@ -9,7 +9,6 @@ neither is your assignment — so you may as well organise it.
 Issue commands, organise your tasks, and let Augustus keep the empire —
 or at least your schedule — in order.
 
-![Augustus GUI](Ui.png)
 
 ## Quick Start
 

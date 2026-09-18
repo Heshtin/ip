@@ -96,10 +96,7 @@ public class DialogBox extends HBox {
      * @return user dialog box
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        DialogBox dialogBox = new DialogBox(text, img);
-        dialogBox.dialog.getStyleClass().add("user-label");
-        dialogBox.getStyleClass().add("user-dialog");
-        return dialogBox;
+        return new DialogBox(text, img);
     }
 
     /**
@@ -112,7 +109,6 @@ public class DialogBox extends HBox {
     public static DialogBox getAugustusDialog(String text, Image img) {
         DialogBox dialogBox = new DialogBox(text, img);
         dialogBox.flip();
-        dialogBox.getStyleClass().add("augustus-dialog");
         return dialogBox;
     }
 
@@ -144,6 +140,13 @@ public class DialogBox extends HBox {
         return dialogBox;
     }
 
+    /**
+     * Creates a welcome dialog box for Augustus.
+     *
+     * @param text welcome message
+     * @param img Augustus's image
+     * @return welcome dialog box
+     */
     public static DialogBox getWelcomeDialog(String text, Image img) {
         DialogBox dialogBox = new DialogBox(text, img);
         dialogBox.flip();

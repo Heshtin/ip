@@ -20,8 +20,6 @@
                minHeight="-Infinity" />
 
         <ImageView fx:id="displayPicture"
-                   fitHeight="75.0"
-                   fitWidth="75.0"
                    pickOnBounds="true"
                    preserveRatio="true" />
 
