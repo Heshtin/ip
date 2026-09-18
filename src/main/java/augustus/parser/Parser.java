@@ -18,6 +18,13 @@ public class Parser {
 
     private static final String TAG_COMMAND = "tag";
     private static final String TAG_SEPARATOR = " /t ";
+
+    /**
+     * Prevents instantiation of the Parser class.
+     */
+    private Parser() {
+    }
+
     /**
      * Returns the command word from the user's input
      *
@@ -25,7 +32,7 @@ public class Parser {
      * @return the command word
      */
     public static String getCommand(String input) {
-        return input.split(" ")[0];
+        return input.trim().split("\\s+")[0];
     }
 
     /**
@@ -36,14 +43,14 @@ public class Parser {
      * @throws AugustusException if the task number is missing or invalid
      */
     public static int parseTaskNumber(String input) throws AugustusException {
-        String[] inputParts = input.split(" ");
+        String[] inputParts = input.trim().split("\\s+");
         if (inputParts.length < 2) {
             throw new AugustusException("A task number is required");
         }
         try {
             return Integer.parseInt(inputParts[1]);
         } catch (NumberFormatException e) {
-            throw new AugustusException("Task number must be number");
+            throw new AugustusException("Task number must be a number");
         }
     }
 
@@ -84,7 +91,7 @@ public class Parser {
             throw new AugustusException("The deadline must have a description");
         }
         if (date.isEmpty()) {
-            throw new AugustusException("Write when is the deadline is due");
+            throw new AugustusException("Specify when the deadline is due");
         }
         return new String[]{description, date};
     }
@@ -103,7 +110,7 @@ public class Parser {
         if (fromIndex == -1 || toIndex == -1 || toIndex < fromIndex) {
             throw new AugustusException("The message should include /from and /to");
         }
-        int fromStart = fromIndex + 7;
+        int fromStart = fromIndex + EVENT_FROM_SEPARATOR.length();
         if (fromStart > toIndex) {
             throw new AugustusException("Write when this event starts and ends");
         }

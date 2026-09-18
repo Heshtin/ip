@@ -124,4 +124,16 @@ public class ParserTest {
                 Parser.parseTag("tag 2 /t "));
     }
 
+    @Test
+    public void parseTodo_emptyDescription_exceptionThrown() {
+        assertThrows(AugustusException.class, () ->
+                Parser.parseTodo("todo"));
+    }
+
+    @Test
+    public void parseFind_emptyKeyword_exceptionThrown() {
+        assertThrows(AugustusException.class, () ->
+                Parser.parseFind("find"));
+    }
+
 }

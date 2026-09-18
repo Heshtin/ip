@@ -8,6 +8,11 @@ import javafx.application.Application;
 public class Launcher {
 
     /**
+     * Prevents instantiation of the launcher class.
+     */
+    private Launcher() {
+    }
+    /**
      * Starts the JavaFX application.
      *
      * @param args command-line arguments

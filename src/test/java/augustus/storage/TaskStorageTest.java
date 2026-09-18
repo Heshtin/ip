@@ -1,6 +1,7 @@
 package augustus.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -117,5 +118,17 @@ public class TaskStorageTest {
         assertEquals("school work", loadedTasks.get(0).getTag());
         assertEquals("urgent", loadedTasks.get(1).getTag());
         assertEquals("group project", loadedTasks.get(2).getTag());
+    }
+
+    @Test
+    public void createFile_missingParentDirectory_createsFile()
+            throws AugustusException {
+
+        Path file = tempDir.resolve("data").resolve("augustus.txt");
+
+        TaskStorage storage = new TaskStorage(file.toString());
+        storage.createFile();
+
+        assertTrue(Files.exists(file));
     }
 }
