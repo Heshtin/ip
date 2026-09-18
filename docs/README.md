@@ -235,7 +235,7 @@ May your duties be completed with honour.
 ## Saving Data
 
 Augustus automatically saves your tasks to the file
-`src/data/augustus.txt` whenever the task list is updated.
+`data/augustus.txt` whenever the task list is updated.
 
 You do not need to save your tasks manually. When Augustus starts again,
 it loads the saved tasks from this file so that your previous data is

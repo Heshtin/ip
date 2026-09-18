@@ -19,7 +19,7 @@ import augustus.ui.Ui;
  * Coordinates user interaction, task management, parsing, and storage.
  */
 public class Augustus {
-    private static final String DEFAULT_FILE_PATH = "./src/data/augustus.txt";
+    private static final String DEFAULT_FILE_PATH = "./data/augustus.txt";
 
     private final TaskStorage storage;
     private TaskList tasks;
